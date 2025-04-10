@@ -1,0 +1,2780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIPTRONIC</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: rgb(9, 105, 240);
+            height: 120px;
+        }
+
+        .logo img {
+            height: 155px; /* Adjusted size */
+        }
+
+        .header-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .header-item button {
+            padding: 14px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .scan-to-pay button {
+            background-color: #ff9d00;
+            color: white;
+        }
+
+        .cart button {
+            background-color: #e708f3;
+            color: rgb(255, 255, 255);
+        }
+
+        .login button {
+            background-color: #3fee0a;
+            color: white;
+            border-radius: 65px;
+        }
+
+        .search-box {
+            flex: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+
+        .search-box button {
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #def10a;
+            color: rgb(248, 248, 248);
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+
+        /* Popup container */
+        .popup {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+        }
+
+        /* Popup content */
+        .popup-content {
+            position: relative; /* Relative positioning for the close button */
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%; /* Adjust as needed */
+            max-width: 400px; /* Max width for larger screens */
+            border-radius: 8px; /* Rounded corners */
+        }
+
+        /* The close button */
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-popup:hover,
+        .close-popup:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+
+
+        
+        /* Image styling inside the popup */
+        .popup-content img {
+            width: 400px; /* Smaller image size */
+            display: block; /* Ensures the image is displayed correctly */
+            margin: 0 auto 15px auto; /* Center image with margin */
+        }
+        
+        /* Login form styling */
+        .popup-content form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-container {
+            margin-bottom: 15px;
+        }
+
+        .input-container input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .popup-btn {
+            background-color: #0a66c2;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .popup-btn:hover {
+            opacity: 0.8;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center; /* Center the success message */
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #ff6347;
+        }
+
+        section {
+            padding: 40px 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+            color: #333;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            width: 80px;
+            height: 4px;
+            background-color: #ff6347;
+            display: block;
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        .product-section {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .product {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            width: 220px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+        }
+
+        .product img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .product h3 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .product p {
+            font-size: 1em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+
+
+        footer {
+            padding: 20px;
+            background: #f1f1f1;
+            text-align: center;
+        }
+
+        footer p {
+            margin: 5px 0;
+            font-size: 20px;
+        }
+
+        footer a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        
+
+             
+         
+        body {
+    font-family: Arial, sans-serif;
+}
+
+footer {
+    background-color: #f1f1f1;
+    padding: 20px;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 800px;
+    position: relative;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+}
+
+.popup {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.popup-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 600px;
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+        .contact-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 60px;
+            border: 10px solid #ddd;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .contact-form input, .contact-form textarea {
+            display: block;
+            width: 85%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .contact-form button {
+            padding: 10px 20px;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .contact-form button:hover {
+            background: #0056b3;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .contact-info {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #555;
+        }
+        .contact-info p {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Abadi', serif; /* Changed to Abadi font */
+        }
+        .contact-info .label {
+            font-weight: bold;
+            margin-right: 8px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .contact-info .info {
+            font-family: 'Abadi', serif; /* Changed to Abadi font */
+        }
+        .contact-info i {
+            margin-right: 10px;
+            font-size: 18px;
+            color: #007bff;
+        }
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+         color: black;
+        text-decoration: none;
+        cursor: pointer;
+        }
+
+    #overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* Ensure it's above other content */
+}
+    #contact-form {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 20px;
+    z-index: 1001; /* Ensure it's above the overlay */
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-item logo">
+            <img src="diptronic_logo.jpg" alt="Store Logo">
+        </div>
+        <div class="header-item scan-to-pay">
+            <button onclick="openPopup()">&#128179; SCAN TO PAY</button>
+        </div>
+        <div class="header-item search-box">
+            <input type="text" placeholder="Search for electrical, technical appliances...">
+            <button type="button">&#128269;</button>
+        </div>
+        <div class="header-item cart">
+            <button id="cart-button">&#128722; CART</button>
+        </div>
+        <div class="header-item login">
+            <button id="loginBtn">&#128100; LOG IN</button>
+        </div>
+    </header>
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close-popup" onclick="closePopup()">&times;</span>
+            <img src="sample_upi.png" alt="Scan to Pay">
+        </div>
+    </div>
+
+    <div id="loginPopup" class="popup">
+        <div class="popup-content">
+            <span class="close-popup" onclick="closePopup()">&times;</span>
+            <img src="login.jpg" alt="User Icon" class="user-icon">
+            <form id="loginForm">
+                <div class="input-container">
+                    <input type="text" placeholder="Username" id="username" required>
+                </div>
+                <div class="input-container">
+                    <input type="password" placeholder="Password" id="password" required>
+                </div>
+                <button type="submit" class="popup-btn">LOGIN</button>
+                <p id="successMessage" class="success-message" style="display: none;">Log In Successful</p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openPopup() {
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        // Get the login modal
+        var loginPopup = document.getElementById("loginPopup");
+
+        // Get the button that opens the login modal
+        var loginBtn = document.getElementById("loginBtn");
+
+        // Get the close button for the login modal
+        var loginClose = document.querySelector("#loginPopup .close-popup");
+
+        // When the user clicks on the login button, open the modal
+        loginBtn.onclick = function() {
+            loginPopup.style.display = "block";
+        }
+
+        // When the user clicks on the close button, close the modal
+        loginClose.onclick = function() {
+            loginPopup.style.display = "none";
+        }
+
+        // When the user submits the form, show a success message
+        document.getElementById("loginForm").onsubmit = function(event) {
+            event.preventDefault();
+            var successMessage = document.getElementById("successMessage");
+            successMessage.style.display = "block";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == loginPopup) {
+                loginPopup.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html> 
+
+
+
+    </header>
+
+    <nav style="background-color: white; padding: 20px 40px;">
+        <ul style="display: flex; list-style: none; margin: 0; padding: 0;">
+            <li style="margin-right: 50px;">
+                <a href="#mobile-phones" style="text-decoration: none; color: black; font-weight: bold; font-size: 16px;">
+                    Mobile Phones &#9662;
+                </a>
+            </li>
+            <li style="margin-right: 50px;">
+                <a href="#laptops" style="text-decoration: none; color: black; font-weight: bold; font-size: 16px;">
+                    Laptops &#9662;
+                </a>
+            </li>
+            <li style="margin-right: 50px;">
+                <a href="#televisions" style="text-decoration: none; color: black; font-weight: bold; font-size: 16px;">
+                    Televisions &#9662;
+                </a>
+            </li>
+            <li style="margin-right: 50px;">
+                <a href="#washing-machines" style="text-decoration: none; color: black; font-weight: bold; font-size: 16px;">
+                    Washing Machines &#9662;
+                </a>
+            </li>
+            <li style="margin-right: 50px;">
+                <a href="#cameras" style="text-decoration: none; color: black; font-weight: bold; font-size: 16px;">
+                    Cameras &#9662;
+                </a>
+            </li>
+            <li style="margin-right: 50px;">
+                <a href="#air-conditioners" style="text-decoration: none; color: black; font-weight: bold; font-size: 16px;">
+                    Air Conditioners &#9662;
+                </a>
+            </li>
+            <li style="margin-right: 50px;">
+                <a href="#computer-accessories" style="text-decoration: none; color: black; font-weight: bold; font-size: 16px;">
+                    Computer Accessories &#9662;
+                </a>
+            </li>
+        </ul>
+    </nav>
+</body>
+
+
+    
+
+<style>
+    /* Basic styles */
+    .product-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .product {
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 5px;
+        width: 220px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .product img {
+        width: 100%;
+        height: 180px; /* Set a fixed height for all images */
+        object-fit: cover; /* Ensures the image covers the area without distortion */
+        border-radius: 5px;
+    }
+
+    h3 {
+        font-size: 1.2em;
+        margin: 10px 0;
+    }
+
+    p {
+        font-size: 1em;
+        margin: 5px 0;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 10px 0;
+    }
+
+    ul li {
+        font-size: 0.9em;
+        margin: 5px 0;
+    }
+</style> 
+
+
+
+
+
+
+
+<!-- Mobile Phones Section -->
+ <style>
+    .btn-blue {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px 0;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+    
+    .btn-blue:hover {
+        background-color: #0056b3;
+    }
+    
+    .btn-pink {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px 0;
+        background-color: #e83e8c;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+    
+    .btn-pink:hover {
+        background-color: #d63384;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .specifications {
+        position: relative;
+        padding-left: 30px; /* Space for custom bullet */
+    }
+
+    .specifications ul {
+        list-style-type: none; /* Remove default bullets */
+        margin: 0;
+        padding: 0;
+    }
+
+    .specifications li {
+        position: relative;
+        padding-left: 25px; /* Space for custom bullet */
+        margin-bottom: 5px; /* Space between items */
+    }
+
+    .specifications li::before {
+        content: "•"; /* Circle bullet */
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #333; /* Bullet color */
+        font-size: 1.2em; /* Adjust bullet size */
+    }
+</style>
+
+
+<style>
+/* Section Heading */
+#mobile-phones h2 {
+    font-size: 28px;
+    text-align: center;
+    padding: 15px;
+    color: #0000FF; /* Deep blue color */
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Yellow underline */
+#mobile-phones h2::after {
+    content: "";
+    display: block;
+    width: 100px;
+    height: 4px;
+    background-color: #0a0901; /* Yellow color */
+    margin: 10px auto 0; /* Adjust spacing */
+    border-radius: 2px;
+}
+
+/* Real-time effect */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 126, 95, 1);
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+    }
+}
+
+#mobile-phones h2:hover {
+    animation: pulse 1.5s infinite;
+}
+</style>
+    <section id="mobile-phones">
+        <h2>Mobile Phones</h2>
+        <div class="product-section">
+<!-- Product 1 -->
+        <div class="product">
+            <a href="https://www.flipkart.com/apple-iphone-13-green-128-gb/p/itm18a55937b2607?pid=MOBGC9VGSU9DWGJZ&lid=LSTMOBGC9VGSU9DWGJZUXUVYB&marketplace=FLIPKART&q=iphone+13&store=tyy/4io&srno=s_1_1&otracker=search&otracker1=search&fm=organic&iid=b420065b-55d1-464a-9b9b-772acf543447.MOBGC9VGSU9DWGJZ.SEARCH&ppt=pp&ppn=pp&ssid=css3m7dhy80000001724908011817&qH=c68a3b83214bb235"> <img src="iphone13.webp" alt="iPhone 13"></a>
+                <h3>iPhone 13</h3>
+                <p><span class="bold">Price:</span> ₹50,499</p>
+                <p><span class="bold">Specifications:-</span></p>
+                <div class="specifications">
+                    <ul>
+                        <li>128 GB Storage</li>
+                        <li>12 MP Dual Camera</li>
+                        <li>A15 Bionic Chip</li>
+                    </ul>
+                </div>
+                <a href="https://www.flipkart.com/apple-iphone-13-green-128-gb/p/itm18a55937b2607?pid=MOBGC9VGSU9DWGJZ&lid=LSTMOBGC9VGSU9DWGJZUXUVYB&marketplace=FLIPKART&q=iphone+13&store=tyy/4io&srno=s_1_1&otracker=search&otracker1=search&fm=organic&iid=b420065b-55d1-464a-9b9b-772acf543447.MOBGC9VGSU9DWGJZ.SEARCH&ppt=pp&ppn=pp&ssid=css3m7dhy80000001724908011817&qH=c68a3b83214bb235" class="btn-blue add-to-cart" data-name="iPhone 13" data-price="₹50,499" data-specs="128 GB Storage, 12 MP Dual Camera, A15 Bionic Chip" data-image="iphone13.webp" data-url="https://www.flipkart.com/apple-iphone-13-green-128-gb/p/itm18a55937b2607?pid=MOBGC9VGSU9DWGJZ&lid=LSTMOBGC9VGSU9DWGJZUXUVYB&marketplace=FLIPKART&q=iphone+13&store=tyy%2F4io&srno=s_1_1&otracker=search&otracker1=search&fm=organic&iid=b420065b-55d1-464a-9b9b-772acf543447.MOBGC9VGSU9DWGJZ.SEARCH&ppt=pp&ppn=pp&ssid=css3m7dhy80000001724908011817&qH=c68a3b83214bb235">ADD TO CART</a>
+                <a href="https://www.flipkart.com/apple-iphone-13-green-128-gb/p/itm18a55937b2607?pid=MOBGC9VGSU9DWGJZ&lid=LSTMOBGC9VGSU9DWGJZUXUVYB&marketplace=FLIPKART&q=iphone+13&store=tyy%2F4io&srno=s_1_1&otracker=search&otracker1=search&fm=organic&iid=b420065b-55d1-464a-9b9b-772acf543447.MOBGC9VGSU9DWGJZ.SEARCH&ppt=pp&ppn=pp&ssid=css3m7dhy80000001724908011817&qH=c68a3b83214bb235" class="btn-pink" target="_blank">BUY NOW</a>
+            </div>
+                
+        
+<!-- Product 2 -->
+<div class="product">
+    <a href="https://www.flipkart.com/samsung-galaxy-s21-fe-5g-snapdragon-888-graphite-256-gb/p/itm766f7432b6626?pid=MOBGSXD7DXBFQEDE&lid=LSTMOBGSXD7DXBFQEDEDDBPZ2&marketplace=FLIPKART&q=samsung+galaxy+s21&store=tyy/4io&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=1b9b9970-8b41-4a88-b208-4962f48aca31.MOBGSXD7DXBFQEDE.SEARCH&ppt=sp&ppn=sp&ssid=tn6zwmk4gg0000001724908931525&qH=801c11be4285eb40"> <img src="samsunggalazys21.webp" alt="Samsung Galaxy S2"></a>
+    <h3>Samsung Galaxy S21</h3>
+    <p><span class="bold">Price:</span> ₹27,957</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>8 GB RAM</li>
+            <li>128 GB Storage</li>
+            <li>64 MP Triple Camera</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/samsung-galaxy-s21-fe-5g-snapdragon-888-graphite-256-gb/p/itm766f7432b6626?pid=MOBGSXD7DXBFQEDE&lid=LSTMOBGSXD7DXBFQEDEDDBPZ2&marketplace=FLIPKART&q=samsung+galaxy+s21&store=tyy%2F4io&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=1b9b9970-8b41-4a88-b208-4962f48aca31.MOBGSXD7DXBFQEDE.SEARCH&ppt=sp&ppn=sp&ssid=tn6zwmk4gg0000001724908931525&qH=801c11be4285eb40" class="btn-blue add-to-cart" data-name="Samsung Galaxy S2" data-price="₹27,957" data-specs="8 GB RAM, 128 GB Storage, 64 MP Triple Camera" data-image="samsunggalazys21.webp" data-url="https://www.flipkart.com/dell-inspiron-core-i5-11th-gen/p/itmb823c428d6bfc">ADD TO CART</a>
+    <a href="https://www.flipkart.com/samsung-galaxy-s21-fe-5g-snapdragon-888-graphite-256-gb/p/itm766f7432b6626?pid=MOBGSXD7DXBFQEDE&lid=LSTMOBGSXD7DXBFQEDEDDBPZ2&marketplace=FLIPKART&q=samsung+galaxy+s21&store=tyy%2F4io&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=1b9b9970-8b41-4a88-b208-4962f48aca31.MOBGSXD7DXBFQEDE.SEARCH&ppt=sp&ppn=sp&ssid=tn6zwmk4gg0000001724908931525&qH=801c11be4285eb40" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 3 -->
+<div class="product">
+    <a href="https://www.flipkart.com/google-pixel-6a-charcoal-128-gb/p/itme5ae89135d44e?pid=MOBGFKX5YUXD74Z3&lid=LSTMOBGFKX5YUXD74Z3MXA2OB&marketplace=FLIPKART&q=google+pixel+6a&store=tyy/4io&srno=s_1_2&otracker=AS_Query_OrganicAutoSuggest_3_6_na_na_ps&otracker1=AS_Query_OrganicAutoSuggest_3_6_na_na_ps&fm=Search&iid=ee8b5a56-bca1-4408-a7dc-1de3b98e24fd.MOBGFKX5YUXD74Z3.SEARCH&ppt=pp&ppn=pp&ssid=pf40dvmumo0000001724909014033&qH=02ccfad575fc2cbe"> <img src="googlepixel6a.webp" alt="Google Pixel 6a"></a>
+    <h3>Google Pixel 6a</h3>
+    <p><span class="bold">Price:</span> ₹43,999</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>6 GB RAM</li>
+            <li>128 GB Storage</li>
+            <li>12 MP + 12 MP Dual Rear Camera</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/google-pixel-6a-charcoal-128-gb/p/itme5ae89135d44e?pid=MOBGFKX5YUXD74Z3&lid=LSTMOBGFKX5YUXD74Z3MXA2OB&marketplace=FLIPKART&q=google+pixel+6a&store=tyy%2F4io&srno=s_1_2&otracker=AS_Query_OrganicAutoSuggest_3_6_na_na_ps&otracker1=AS_Query_OrganicAutoSuggest_3_6_na_na_ps&fm=Search&iid=ee8b5a56-bca1-4408-a7dc-1de3b98e24fd.MOBGFKX5YUXD74Z3.SEARCH&ppt=pp&ppn=pp&ssid=pf40dvmumo0000001724909014033&qH=02ccfad575fc2cbe" class="btn-blue add-to-cart" data-name="Google Pixel 6a" data-price="₹43,999" data-specs="6 GB RAM, 128 GB Storage, 12 MP + 12 MP Dual Rear Camera" data-image="googlepixel6a.webp" data-url="https://www.flipkart.com/hp-pavilion-gaming-core-i7-11th-gen/p/itmec8b6a63e7ffb">ADD TO CART</a>
+    <a href="https://www.flipkart.com/google-pixel-6a-charcoal-128-gb/p/itme5ae89135d44e?pid=MOBGFKX5YUXD74Z3&lid=LSTMOBGFKX5YUXD74Z3MXA2OB&marketplace=FLIPKART&q=google+pixel+6a&store=tyy%2F4io&srno=s_1_2&otracker=AS_Query_OrganicAutoSuggest_3_6_na_na_ps&otracker1=AS_Query_OrganicAutoSuggest_3_6_na_na_ps&fm=Search&iid=ee8b5a56-bca1-4408-a7dc-1de3b98e24fd.MOBGFKX5YUXD74Z3.SEARCH&ppt=pp&ppn=pp&ssid=pf40dvmumo0000001724909014033&qH=02ccfad575fc2cbe" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 4 -->
+<div class="product">
+    <a href="https://www.flipkart.com/oneplus-9-pro-pine-green-128-gb/p/itm639d25b208968?pid=MOBGDM33ZDTRAG7U&lid=LSTMOBGDM33ZDTRAG7UPJR5O2&marketplace=FLIPKART&q=oneplus+9+pro+pine+green+128+gb&store=tyy/4io&srno=s_1_1&otracker=AS_QueryStore_OrganicAutoSuggest_1_14_na_na_ps&otracker1=AS_QueryStore_OrganicAutoSuggest_1_14_na_na_ps&fm=Search&iid=95f93d5e-5ded-4ce7-a161-4bd563c4cd66.MOBGDM33ZDTRAG7U.SEARCH&ppt=sp&ppn=sp&ssid=u4xa3z5zu80000001724909147922&qH=bd6d7c196c15dba1"> <img src="oneplus9.webp" alt="OnePlus 9"></a>
+    <h3>OnePlus 9</h3>
+    <p><span class="bold">Price:</span> ₹41,499</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>8 GB RAM</li>
+            <li>128 GB Storage</li>
+            <li>48 MP Triple Camera</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/oneplus-9-pro-pine-green-128-gb/p/itm639d25b208968?pid=MOBGDM33ZDTRAG7U&lid=LSTMOBGDM33ZDTRAG7UPJR5O2&marketplace=FLIPKART&q=oneplus+9+pro+pine+green+128+gb&store=tyy%2F4io&srno=s_1_1&otracker=AS_QueryStore_OrganicAutoSuggest_1_14_na_na_ps&otracker1=AS_QueryStore_OrganicAutoSuggest_1_14_na_na_ps&fm=Search&iid=95f93d5e-5ded-4ce7-a161-4bd563c4cd66.MOBGDM33ZDTRAG7U.SEARCH&ppt=sp&ppn=sp&ssid=u4xa3z5zu80000001724909147922&qH=bd6d7c196c15dba1" class="btn-blue add-to-cart" data-name="OnePlus 9" data-price="₹41,499" data-specs="8 GB RAM, 128 GB Storage, 48 MP Triple Camera" data-image="oneplus9.webp" data-url="https://www.flipkart.com/lenovo-legion-core-i5-10th-gen/p/itmf623e3a3f1458">ADD TO CART</a>
+    <a href="https://www.flipkart.com/oneplus-9-pro-pine-green-128-gb/p/itm639d25b208968?pid=MOBGDM33ZDTRAG7U&lid=LSTMOBGDM33ZDTRAG7UPJR5O2&marketplace=FLIPKART&q=oneplus+9+pro+pine+green+128+gb&store=tyy%2F4io&srno=s_1_1&otracker=AS_QueryStore_OrganicAutoSuggest_1_14_na_na_ps&otracker1=AS_QueryStore_OrganicAutoSuggest_1_14_na_na_ps&fm=Search&iid=95f93d5e-5ded-4ce7-a161-4bd563c4cd66.MOBGDM33ZDTRAG7U.SEARCH&ppt=sp&ppn=sp&ssid=u4xa3z5zu80000001724909147922&qH=bd6d7c196c15dba1" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 5 -->
+<div class="product">
+    <a href="https://www.flipkart.com/xiaomi-11t-pro-5g-hyperphone-meteorite-black-256-gb/p/itm7124fdf6f4b04?pid=MOBGAYHYNQR3DANH&lid=LSTMOBGAYHYNQR3DANHYSGV2V&marketplace=FLIPKART&q=Xiaomi+Mi+11+Pro&store=tyy/4io&srno=s_1_4&otracker=search&otracker1=search&fm=search-autosuggest&iid=20db0c38-b283-416e-93a1-f39db7a7ab43.MOBGAYHYNQR3DANH.SEARCH&ppt=sp&ppn=sp&ssid=73ctn7vuv40000001724909217127&qH=ca973d513506c2de"> <img src="xiaomimi11.webp" alt="Xiaomi Mi 11 Pro"></a>
+    <h3>Xiaomi Mi 11 Pro</h3>
+    <p><span class="bold">Price:</span> ₹27,999</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>8 GB RAM</li>
+            <li>256 GB Storage</li>
+            <li>50 MP Triple Camera</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/xiaomi-11t-pro-5g-hyperphone-meteorite-black-256-gb/p/itm7124fdf6f4b04?pid=MOBGAYHYNQR3DANH&lid=LSTMOBGAYHYNQR3DANHYSGV2V&marketplace=FLIPKART&q=Xiaomi+Mi+11+Pro&store=tyy%2F4io&srno=s_1_4&otracker=search&otracker1=search&fm=search-autosuggest&iid=20db0c38-b283-416e-93a1-f39db7a7ab43.MOBGAYHYNQR3DANH.SEARCH&ppt=sp&ppn=sp&ssid=73ctn7vuv40000001724909217127&qH=ca973d513506c2de" class="btn-blue add-to-cart" data-name="Xiaomi Mi 11 Pro" data-price="₹27,999" data-specs="8 GB RAM, 256 GB Storage, 50 MP Triple Camera" data-image="xiaomimi11.webp" data-url="https://www.flipkart.com/asus-rog-strix-core-i7-12th-gen/p/itm626b5a1aaf7c6">ADD TO CART</a>
+    <a href="https://www.flipkart.com/xiaomi-11t-pro-5g-hyperphone-meteorite-black-256-gb/p/itm7124fdf6f4b04?pid=MOBGAYHYNQR3DANH&lid=LSTMOBGAYHYNQR3DANHYSGV2V&marketplace=FLIPKART&q=Xiaomi+Mi+11+Pro&store=tyy%2F4io&srno=s_1_4&otracker=search&otracker1=search&fm=search-autosuggest&iid=20db0c38-b283-416e-93a1-f39db7a7ab43.MOBGAYHYNQR3DANH.SEARCH&ppt=sp&ppn=sp&ssid=73ctn7vuv40000001724909217127&qH=ca973d513506c2de" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+
+
+
+
+
+
+
+
+<!-- LAPTOPS Section -->
+<style>
+    .btn-blue {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px 0;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+    
+    .btn-blue:hover {
+        background-color: #0056b3;
+    }
+    
+    .btn-pink {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px 0;
+        background-color: #e83e8c;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+    
+    .btn-pink:hover {
+        background-color: #d63384;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .specifications {
+        position: relative;
+        padding-left: 30px; /* Space for custom bullet */
+    }
+
+    .specifications ul {
+        list-style-type: none; /* Remove default bullets */
+        margin: 0;
+        padding: 0;
+    }
+
+    .specifications li {
+        position: relative;
+        padding-left: 25px; /* Space for custom bullet */
+        margin-bottom: 5px; /* Space between items */
+    }
+
+    .specifications li::before {
+        content: "•"; /* Circle bullet */
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #333; /* Bullet color */
+        font-size: 1.2em; /* Adjust bullet size */
+    }
+</style>
+
+
+<style>
+    /* Section Heading */
+    #laptops h2 {
+        font-size: 28px;
+        text-align: center;
+        padding: 15px;
+        color: #0000FF; /* Deep blue color */
+        background: linear-gradient(to right, #ff7e5f, #feb47b);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Yellow underline */
+    #laptops h2::after {
+        content: "";
+        display: block;
+        width: 100px;
+        height: 4px;
+        background-color: #0a0901; /* Yellow color */
+        margin: 10px auto 0; /* Adjust spacing */
+        border-radius: 2px;
+    }
+    
+    /* Real-time effect */
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+        }
+        50% {
+            box-shadow: 0 0 20px rgba(255, 126, 95, 1);
+        }
+        100% {
+            box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+        }
+    }
+    
+    #laptops h2:hover {
+        animation: pulse 1.5s infinite;
+    }
+    </style>
+    
+
+
+<section id="laptops">
+    <h2>Laptops</h2>
+    <div class="product-section">
+        <!-- Product 1 -->
+<div class="product">
+    <a href="https://www.flipkart.com/apple-macbook-air-m3-16-gb-512-gb-ssd-macos-sonoma-mxd43hn-a/p/itm4da8daafa869b?pid=COMGYP5GSZFWRXCE&lid=LSTCOMGYP5GSZFWRXCEJGOJUL&marketplace=FLIPKART&q=macbook+air&store=6bo/b5g&spotlightTagId=TrendingId_6bo/b5g&srno=s_1_3&otracker=search&otracker1=search&fm=Search&iid=f067b62b-5b7a-4e80-9311-9233ef277cc9.COMGYP5GSZFWRXCE.SEARCH&ppt=sp&ppn=sp&ssid=168yv3c1c00000001724920364438&qH=b61d62051d5441f9"> <img src="mackbookair.webp" alt="MacBook Air">
+    </a>
+    <h3>MacBook Air</h3>
+    <p><span class="bold">Price:</span> ₹1,10,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>M1 Chip</li>
+            <li>8 GB RAM</li>
+            <li>256 GB SSD</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/apple-macbook-air-m3-16-gb-512-gb-ssd-macos-sonoma-mxd43hn-a/p/itm4da8daafa869b?pid=COMGYP5GSZFWRXCE&lid=LSTCOMGYP5GSZFWRXCEJGOJUL&marketplace=FLIPKART&q=macbook+air&store=6bo%2Fb5g&spotlightTagId=TrendingId_6bo%2Fb5g&srno=s_1_3&otracker=search&otracker1=search&fm=Search&iid=f067b62b-5b7a-4e80-9311-9233ef277cc9.COMGYP5GSZFWRXCE.SEARCH&ppt=sp&ppn=sp&ssid=168yv3c1c00000001724920364438&qH=b61d62051d5441f9" class="btn-blue add-to-cart" data-name="MacBook Air" data-price="₹1,10,990" data-specs="M1 Chip, 8 GB RAM, 256 GB SSD" data-image="mackbookair.webp" data-url="https://www.flipkart.com/apple-macbook-air-m1-chip/p/itm9bce1e283b28d">ADD TO CART</a>
+    <a href="https://www.flipkart.com/apple-macbook-air-m3-16-gb-512-gb-ssd-macos-sonoma-mxd43hn-a/p/itm4da8daafa869b?pid=COMGYP5GSZFWRXCE&lid=LSTCOMGYP5GSZFWRXCEJGOJUL&marketplace=FLIPKART&q=macbook+air&store=6bo%2Fb5g&spotlightTagId=TrendingId_6bo%2Fb5g&srno=s_1_3&otracker=search&otracker1=search&fm=Search&iid=f067b62b-5b7a-4e80-9311-9233ef277cc9.COMGYP5GSZFWRXCE.SEARCH&ppt=sp&ppn=sp&ssid=168yv3c1c00000001724920364438&qH=b61d62051d5441f9" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 2 -->
+<div class="product">
+    <a href="https://www.flipkart.com/dell-inspiron-intel-core-i5-11th-gen-1135g7-8-gb-1-tb-hdd-256-gb-ssd-windows-11-home-3511-thin-light-laptop/p/itma0024287ed41b?pid=COMG9NYDTTRAZBHP&lid=LSTCOMG9NYDTTRAZBHPFLY8PS&marketplace=FLIPKART&q=dell+inspiron+15+54900&store=6bo&srno=s_1_8&otracker=search&otracker1=search&fm=Search&iid=4280ebd1-bf7c-4c86-80a5-e9625dffb22a.COMG9NYDTTRAZBHP.SEARCH&ppt=sp&ppn=sp&ssid=yo8d4a0g1s0000001724920794904&qH=af5d4cfdd6d5fb71"> <img src="dellxps.webp" alt="Dell Inspiron 15">
+    </a>
+    <h3>Dell Inspiron 15</h3>
+    <p><span class="bold">Price:</span> ₹54,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>11th Gen Intel Core i5</li>
+            <li>8 GB RAM</li>
+            <li>1 TB HDD + 256 GB SSD</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/dell-inspiron-intel-core-i5-11th-gen-1135g7-8-gb-1-tb-hdd-256-gb-ssd-windows-11-home-3511-thin-light-laptop/p/itma0024287ed41b?pid=COMG9NYDTTRAZBHP&lid=LSTCOMG9NYDTTRAZBHPFLY8PS&marketplace=FLIPKART&q=dell+inspiron+15+54900&store=6bo&srno=s_1_8&otracker=search&otracker1=search&fm=Search&iid=4280ebd1-bf7c-4c86-80a5-e9625dffb22a.COMG9NYDTTRAZBHP.SEARCH&ppt=sp&ppn=sp&ssid=yo8d4a0g1s0000001724920794904&qH=af5d4cfdd6d5fb71" class="btn-blue add-to-cart" data-name="Dell Inspiron 15" data-price="₹54,990" data-specs="11th Gen Intel Core i5, 8 GB RAM, 1 TB HDD + 256 GB SSD" data-image="dellxps.webp" data-url="https://www.flipkart.com/dell-inspiron-core-i5-11th-gen/p/itmb823c428d6bfc">ADD TO CART</a>
+    <a href="https://www.flipkart.com/dell-inspiron-intel-core-i5-11th-gen-1135g7-8-gb-1-tb-hdd-256-gb-ssd-windows-11-home-3511-thin-light-laptop/p/itma0024287ed41b?pid=COMG9NYDTTRAZBHP&lid=LSTCOMG9NYDTTRAZBHPFLY8PS&marketplace=FLIPKART&q=dell+inspiron+15+54900&store=6bo&srno=s_1_8&otracker=search&otracker1=search&fm=Search&iid=4280ebd1-bf7c-4c86-80a5-e9625dffb22a.COMG9NYDTTRAZBHP.SEARCH&ppt=sp&ppn=sp&ssid=yo8d4a0g1s0000001724920794904&qH=af5d4cfdd6d5fb71" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 3 -->
+<div class="product">
+    <a href="https://www.flipkart.com/hp-pavilion-gaming-intel-core-i5-9th-gen-9300h-8-gb-1-tb-hdd-256-gb-ssd-windows-10-home-4-graphics-nvidia-geforce-gtx-1650-144-hz-15-dk0272tx-laptop/p/itmd438fd1e3e486?pid=COMFU2RFF4TQX2AA&lid=LSTCOMFU2RFF4TQX2AAM5HT2W&marketplace=FLIPKART&q=HP+Pavilion+Gaming&store=6bo/b5g&srno=s_1_8&otracker=search&otracker1=search&fm=Search&iid=457ca753-9c41-4717-8e74-eb52f2f0a1e3.COMFU2RFF4TQX2AA.SEARCH&ppt=sp&ppn=sp&ssid=7axf88ctbk0000001724920978591&qH=32490f86c9c5cdca" target="_blank"> <img src="hpspectra.webp" alt="HP Pavilion Gaming">
+    </a>
+    <h3>HP Pavilion Gaming</h3>
+    <p><span class="bold">Price:</span> ₹76,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>11th Gen Intel Core i7</li>
+            <li>16 GB RAM</li>
+            <li>512 GB SSD</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/hp-pavilion-gaming-intel-core-i5-9th-gen-9300h-8-gb-1-tb-hdd-256-gb-ssd-windows-10-home-4-graphics-nvidia-geforce-gtx-1650-144-hz-15-dk0272tx-laptop/p/itmd438fd1e3e486?pid=COMFU2RFF4TQX2AA&lid=LSTCOMFU2RFF4TQX2AAM5HT2W&marketplace=FLIPKART&q=HP+Pavilion+Gaming&store=6bo%2Fb5g&srno=s_1_8&otracker=search&otracker1=search&fm=Search&iid=457ca753-9c41-4717-8e74-eb52f2f0a1e3.COMFU2RFF4TQX2AA.SEARCH&ppt=sp&ppn=sp&ssid=7axf88ctbk0000001724920978591&qH=32490f86c9c5cdca" class="btn-blue add-to-cart" data-name="HP Pavilion Gaming" data-price="₹76,990" data-specs="11th Gen Intel Core i7, 16 GB RAM, 512 GB SSD" data-image="hpspectra.webp" data-url="https://www.flipkart.com/hp-pavilion-gaming-core-i7-11th-gen/p/itmec8b6a63e7ffb">ADD TO CART</a>
+    <a href="https://www.flipkart.com/hp-pavilion-gaming-intel-core-i5-9th-gen-9300h-8-gb-1-tb-hdd-256-gb-ssd-windows-10-home-4-graphics-nvidia-geforce-gtx-1650-144-hz-15-dk0272tx-laptop/p/itmd438fd1e3e486?pid=COMFU2RFF4TQX2AA&lid=LSTCOMFU2RFF4TQX2AAM5HT2W&marketplace=FLIPKART&q=HP+Pavilion+Gaming&store=6bo%2Fb5g&srno=s_1_8&otracker=search&otracker1=search&fm=Search&iid=457ca753-9c41-4717-8e74-eb52f2f0a1e3.COMFU2RFF4TQX2AA.SEARCH&ppt=sp&ppn=sp&ssid=7axf88ctbk0000001724920978591&qH=32490f86c9c5cdca" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 4 -->
+<div class="product">
+    <a href="https://www.flipkart.com/lenovo-legion-5-pro-amd-ryzen-7-octa-core-6800h-16-gb-1-tb-ssd-windows-11-home-6-gb-graphics-nvidia-geforce-rtx-3060-16arh7h-gaming-laptop/p/itmed381fc3835dd?pid=COMGM7VX2GEKUXNC&lid=LSTCOMGM7VX2GEKUXNCI0PYAR&marketplace=FLIPKART&q=Lenovo+Legion+5&store=search.flipkart.com&srno=s_1_2&otracker=search&otracker1=search&fm=Search&iid=b27032ba-1242-46b1-92b1-fc2fa7327faf.COMGM7VX2GEKUXNC.SEARCH&ppt=sp&ppn=sp&ssid=e4msbvqbgw0000001724922184780&qH=e7ae71ff4548e08b" target="_blank"> <img src="lenovothinkpad.webp" alt="Lenovo Legion 5">
+    </a>
+    <h3>Lenovo Legion 5</h3>
+    <p><span class="bold">Price:</span> ₹78,490</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>10th Gen Intel Core i5</li>
+            <li>16 GB RAM</li>
+            <li>1 TB HDD + 256 GB SSD</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/lenovo-legion-5-pro-amd-ryzen-7-octa-core-6800h-16-gb-1-tb-ssd-windows-11-home-6-gb-graphics-nvidia-geforce-rtx-3060-16arh7h-gaming-laptop/p/itmed381fc3835dd?pid=COMGM7VX2GEKUXNC&lid=LSTCOMGM7VX2GEKUXNCI0PYAR&marketplace=FLIPKART&q=Lenovo+Legion+5&store=search.flipkart.com&srno=s_1_2&otracker=search&otracker1=search&fm=Search&iid=b27032ba-1242-46b1-92b1-fc2fa7327faf.COMGM7VX2GEKUXNC.SEARCH&ppt=sp&ppn=sp&ssid=e4msbvqbgw0000001724922184780&qH=e7ae71ff4548e08b" class="btn-blue add-to-cart" data-name="Lenovo Legion 5" data-price="₹78,490" data-specs="10th Gen Intel Core i5, 16 GB RAM, 1 TB HDD + 256 GB SSD" data-image="lenovothinkpad.webp" data-url="https://www.flipkart.com/lenovo-legion-core-i5-10th-gen/p/itmf623e3a3f1458">ADD TO CART</a>
+    <a href="https://www.flipkart.com/lenovo-legion-5-pro-amd-ryzen-7-octa-core-6800h-16-gb-1-tb-ssd-windows-11-home-6-gb-graphics-nvidia-geforce-rtx-3060-16arh7h-gaming-laptop/p/itmed381fc3835dd?pid=COMGM7VX2GEKUXNC&lid=LSTCOMGM7VX2GEKUXNCI0PYAR&marketplace=FLIPKART&q=Lenovo+Legion+5&store=search.flipkart.com&srno=s_1_2&otracker=search&otracker1=search&fm=Search&iid=b27032ba-1242-46b1-92b1-fc2fa7327faf.COMGM7VX2GEKUXNC.SEARCH&ppt=sp&ppn=sp&ssid=e4msbvqbgw0000001724922184780&qH=e7ae71ff4548e08b" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 5 -->
+<div class="product">
+    <a href="https://www.flipkart.com/asus-rog-strix-g15-amd-ryzen-7-octa-core-6800hs-16-gb-512-gb-ssd-windows-11-home-4-graphics-nvidia-geforce-rtx-3050-g513rc-hn061w-gaming-laptop/p/itm6c78207201c3f?pid=COMGSPC6J9TVSV6Y&lid=LSTCOMGSPC6J9TVSV6YLMDFOP&marketplace=FLIPKART&q=ASUS+ROG+Strix&store=search.flipkart.com&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=e6adfdd3-45f3-4ba3-977b-7b76b694f025.COMGSPC6J9TVSV6Y.SEARCH&ppt=sp&ppn=sp&ssid=8whnl0ywjk0000001724922342226&qH=00fd74f5888b2e2a" target="_blank"> <img src="asusrog.webp" alt="ASUS ROG Strix">
+    </a>
+    <h3>ASUS ROG Strix</h3>
+    <p><span class="bold">Price:</span> ₹1,18,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>12th Gen Intel Core i7</li>
+            <li>16 GB RAM</li>
+            <li>512 GB SSD</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/asus-rog-strix-g15-amd-ryzen-7-octa-core-6800hs-16-gb-512-gb-ssd-windows-11-home-4-graphics-nvidia-geforce-rtx-3050-g513rc-hn061w-gaming-laptop/p/itm6c78207201c3f?pid=COMGSPC6J9TVSV6Y&lid=LSTCOMGSPC6J9TVSV6YLMDFOP&marketplace=FLIPKART&q=ASUS+ROG+Strix&store=search.flipkart.com&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=e6adfdd3-45f3-4ba3-977b-7b76b694f025.COMGSPC6J9TVSV6Y.SEARCH&ppt=sp&ppn=sp&ssid=8whnl0ywjk0000001724922342226&qH=00fd74f5888b2e2a" class="btn-blue add-to-cart" data-name="ASUS ROG Strix" data-price="₹1,18,990" data-specs="12th Gen Intel Core i7, 16 GB RAM, 512 GB SSD" data-image="asusrog.webp" data-url="https://www.flipkart.com/asus-rog-strix-core-i7-12th-gen/p/itm626b5a1aaf7c6">ADD TO CART</a>
+    <a href="https://www.flipkart.com/asus-rog-strix-g15-amd-ryzen-7-octa-core-6800hs-16-gb-512-gb-ssd-windows-11-home-4-graphics-nvidia-geforce-rtx-3050-g513rc-hn061w-gaming-laptop/p/itm6c78207201c3f?pid=COMGSPC6J9TVSV6Y&lid=LSTCOMGSPC6J9TVSV6YLMDFOP&marketplace=FLIPKART&q=ASUS+ROG+Strix&store=search.flipkart.com&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=e6adfdd3-45f3-4ba3-977b-7b76b694f025.COMGSPC6J9TVSV6Y.SEARCH&ppt=sp&ppn=sp&ssid=8whnl0ywjk0000001724922342226&qH=00fd74f5888b2e2a" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+    </div>
+</section>
+
+
+
+
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+        .banner-container {
+            position: relative;
+            width: 100%;
+            height: 500px; /* Adjust the height as needed */
+            background-color: #f0f0f0; /* Background color for the banner */
+        }
+        .banner-wrapper {
+            display: flex;
+            width: 100%; /* Adjust based on the number of banners */
+            height: 99%;
+            animation: slide 5s infinite linear;
+        }
+        .banner {
+            flex: 1;
+            min-width: 100%;
+            height: 100%;
+            background-size: cover; /* Ensures the image covers the banner area */
+            background-position: center; /* Centers the image within the banner */
+            background-repeat: no-repeat; /* Prevents image repetition */
+            position: relative;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner-container">
+        <div class="banner-wrapper">
+            <!-- Banner 1 -->
+            <div class="banner" style="background-image: url('oneplustvbanner.png');">
+ 
+            </div>
+            <!-- Banner 2 -->
+            <div class="banner" style="background-image: url('phonebanner.webp');">
+    </div>
+</section>
+
+
+
+
+
+
+<!-- TELEVISIONS Section -->
+<style>
+    .btn-blue, .btn-pink {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px 0;
+        border-radius: 5px;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 16px; /* Ensure consistent font size */
+        line-height: 1.5; /* Consistent line height */
+        transition: background-color 0.3s ease; /* Smooth transition */
+    }
+
+    .btn-blue {
+        background-color: #007bff;
+        color: #fff;
+    }
+    
+    .btn-blue:hover {
+        background-color: #0056b3;
+    }
+    
+    .btn-pink {
+        background-color: #e83e8c;
+        color: #fff;
+    }
+    
+    .btn-pink:hover {
+        background-color: #d63384;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .specifications {
+        position: relative;
+        padding-left: 30px; /* Space for custom bullet */
+    }
+
+    .specifications ul {
+        list-style-type: none; /* Remove default bullets */
+        margin: 0;
+        padding: 0;
+    }
+
+    .specifications li {
+        position: relative;
+        padding-left: 25px; /* Space for custom bullet */
+        margin-bottom: 5px; /* Space between items */
+    }
+
+    .specifications li::before {
+        content: "•"; /* Circle bullet */
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #333; /* Bullet color */
+        font-size: 1.2em; /* Adjust bullet size */
+    }
+
+    .product img {
+        width: 100%; /* Ensure images are responsive */
+        transition: transform 0.3s ease; /* Smooth zoom effect */
+    }
+
+    .product img:hover {
+        transform: scale(1.05); /* Slight zoom effect */
+    }
+
+    @media (max-width: 768px) {
+        .product {
+            margin-bottom: 20px; /* Space between products on smaller screens */
+        }
+    }
+</style>
+
+<style>
+    /* Section Heading */
+    #televisions h2 {
+        font-size: 28px;
+        text-align: center;
+        padding: 15px;
+        color: #0000FF; /* Deep blue color */
+        background: linear-gradient(to right, #ff7e5f, #feb47b);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Yellow underline */
+    #televisions h2::after {
+        content: "";
+        display: block;
+        width: 100px;
+        height: 4px;
+        background-color: #0a0901; /* Yellow color */
+        margin: 10px auto 0; /* Adjust spacing */
+        border-radius: 2px;
+    }
+    
+    /* Real-time effect */
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+        }
+        50% {
+            box-shadow: 0 0 20px rgba(255, 126, 95, 1);
+        }
+        100% {
+            box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+        }
+    }
+    
+    #televisions h2:hover {
+        animation: pulse 1.5s infinite;
+    }
+    </style>
+    
+
+<section id="televisions">
+    <h2>Televisions</h2>
+    <div class="product-section">
+        <!-- Product 1 -->
+<div class="product">
+    <a href="https://www.flipkart.com/samsung-qn90bakl-163-cm-65-inch-qled-ultra-hd-4k-smart-tizen-tv/p/itm6a31b084ba548?pid=TVSGE3FUCNHAZNX3&lid=LSTTVSGE3FUCNHAZNX3KUZCVP&marketplace=FLIPKART&q=Samsung+QLED+65&store=ckf/czl&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=bc78066b-9bea-450d-8f38-71ba1e8d7d0d.TVSGE3FUCNHAZNX3.SEARCH&ppt=sp&ppn=sp&ssid=12b04qbiww0000001724922674431&qH=c40bee3acfb1c799" target="_blank"> <img src="samsungqled65.webp" alt="SAMSUNG QLED 55 inch"></a>
+    <h3>Samsung QLED 65"</h3>
+    <p><span class="bold">Price:</span> ₹1,46,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>65 inch 4K QLED Display</li>
+            <li>Quantum Processor 4K</li>
+            <li>Smart TV with Voice Assistants</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/samsung-qn90bakl-163-cm-65-inch-qled-ultra-hd-4k-smart-tizen-tv/p/itm6a31b084ba548?pid=TVSGE3FUCNHAZNX3&lid=LSTTVSGE3FUCNHAZNX3KUZCVP&marketplace=FLIPKART&q=Samsung+QLED+65&store=ckf%2Fczl&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=bc78066b-9bea-450d-8f38-71ba1e8d7d0d.TVSGE3FUCNHAZNX3.SEARCH&ppt=sp&ppn=sp&ssid=12b04qbiww0000001724922674431&qH=c40bee3acfb1c799" class="btn-blue add-to-cart" data-name="Samsung QLED 65 inch" data-price="₹1,46,990" data-specs="65 inch 4K QLED Display, Quantum Processor 4K, Smart TV with Voice Assistants" data-image="samsungqled65.webp" data-url="https://www.flipkart.com/samsung-165-5-cm-65-inch-qled-ultra-hd-4k-smart-tv/p/itmf3b4c28e1ef8d">ADD TO CART</a>
+    <a href="https://www.flipkart.com/samsung-qn90bakl-163-cm-65-inch-qled-ultra-hd-4k-smart-tizen-tv/p/itm6a31b084ba548?pid=TVSGE3FUCNHAZNX3&lid=LSTTVSGE3FUCNHAZNX3KUZCVP&marketplace=FLIPKART&q=Samsung+QLED+65&store=ckf%2Fczl&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=bc78066b-9bea-450d-8f38-71ba1e8d7d0d.TVSGE3FUCNHAZNX3.SEARCH&ppt=sp&ppn=sp&ssid=12b04qbiww0000001724922674431&qH=c40bee3acfb1c799" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 2 -->
+<div class="product">
+    <a href="https://www.flipkart.com/lg-oled-a3-139-cm-55-inch-ultra-hd-4k-smart-webos-tv-alpha77-gen6-ai-processor-picture-pro-pixel-dimming-dolby-vision-iq-atmos-eye-comfort-display-nvidia-g-sync-vrr-amd-freesync-60-hz-refresh-rate-game-optimizer-magic-remote-control-oled55a3psa-5-years-os-upgrade/p/itmdfbb71103875a?pid=TVSGQQDYGSYRJ5K2&lid=LSTTVSGQQDYGSYRJ5K2LDGZWK&marketplace=FLIPKART&q=LG+OLED+A3+55&store=ckf/czl&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=83e13e3b-3b95-4c7a-99ff-1c3654a195d8.TVSGQQDYGSYRJ5K2.SEARCH&ppt=sp&ppn=sp&ssid=drhjfx692o0000001724922726685&qH=f10a363df0e36923" target="_blank"> <img src="lgoleda3.webp" alt="LG OLED A3 55 inch"></a>
+    <h3>LG OLED A3 55"</h3>
+    <p><span class="bold">Price:</span> ₹94,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>55 inch 4K OLED Display</li>
+            <li>AI ThinQ with Built-in Google Assistant</li>
+            <li>Dolby Vision & Atmos</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/lg-oled-a3-139-cm-55-inch-ultra-hd-4k-smart-webos-tv-alpha77-gen6-ai-processor-picture-pro-pixel-dimming-dolby-vision-iq-atmos-eye-comfort-display-nvidia-g-sync-vrr-amd-freesync-60-hz-refresh-rate-game-optimizer-magic-remote-control-oled55a3psa-5-years-os-upgrade/p/itmdfbb71103875a?pid=TVSGQQDYGSYRJ5K2&lid=LSTTVSGQQDYGSYRJ5K2LDGZWK&marketplace=FLIPKART&q=LG+OLED+A3+55&store=ckf%2Fczl&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=83e13e3b-3b95-4c7a-99ff-1c3654a195d8.TVSGQQDYGSYRJ5K2.SEARCH&ppt=sp&ppn=sp&ssid=drhjfx692o0000001724922726685&qH=f10a363df0e36923" class="btn-blue add-to-cart" data-name="LG OLED A3 55 inch" data-price="₹94,990" data-specs="55 inch 4K OLED Display, AI ThinQ with Built-in Google Assistant, Dolby Vision & Atmos" data-image="lgoleda3.webp" data-url="https://www.flipkart.com/lg-139-cm-55-inch-oled-ultra-hd-4k-smart-tv/p/itmab1e9fb25d4e8">ADD TO CART</a>
+    <a href="https://www.flipkart.com/lg-oled-a3-139-cm-55-inch-ultra-hd-4k-smart-webos-tv-alpha77-gen6-ai-processor-picture-pro-pixel-dimming-dolby-vision-iq-atmos-eye-comfort-display-nvidia-g-sync-vrr-amd-freesync-60-hz-refresh-rate-game-optimizer-magic-remote-control-oled55a3psa-5-years-os-upgrade/p/itmdfbb71103875a?pid=TVSGQQDYGSYRJ5K2&lid=LSTTVSGQQDYGSYRJ5K2LDGZWK&marketplace=FLIPKART&q=LG+OLED+A3+55&store=ckf%2Fczl&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=83e13e3b-3b95-4c7a-99ff-1c3654a195d8.TVSGQQDYGSYRJ5K2.SEARCH&ppt=sp&ppn=sp&ssid=drhjfx692o0000001724922726685&qH=f10a363df0e36923" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 3 -->
+<div class="product">
+    <a href="https://www.flipkart.com/sony-bravia-189-cm-75-inch-ultra-hd-4k-led-smart-google-tv/p/itmf261bc78416a5?pid=TVSG4FNFDJHHBHJ8&lid=LSTTVSG4FNFDJHHBHJ8AENZQV&marketplace=FLIPKART&q=Sony+Bravia+75&store=ckf/czl&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=bce69dde-0db6-454c-8d27-e8a5336eda65.TVSG4FNFDJHHBHJ8.SEARCH&ppt=sp&ppn=sp&ssid=07cgmqr2y80000001724922908215&qH=409f2660f969566d" target="_blank"><img src="sonybravia75.webp" alt="Sony Bravia 75 inch"></a>
+    <h3>Sony Bravia 75"</h3>
+    <p><span class="bold">Price:</span> ₹1,44,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>75 inch 4K UHD Display</li>
+            <li>X1 4K Processor</li>
+            <li>Android TV with Google Assistant</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/sony-bravia-189-cm-75-inch-ultra-hd-4k-led-smart-google-tv/p/itmf261bc78416a5?pid=TVSG4FNFDJHHBHJ8&lid=LSTTVSG4FNFDJHHBHJ8AENZQV&marketplace=FLIPKART&q=Sony+Bravia+75&store=ckf%2Fczl&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=bce69dde-0db6-454c-8d27-e8a5336eda65.TVSG4FNFDJHHBHJ8.SEARCH&ppt=sp&ppn=sp&ssid=07cgmqr2y80000001724922908215&qH=409f2660f969566d" class="btn-blue add-to-cart" data-name="Sony Bravia 75 inch" data-price="₹1,44,990" data-specs="75 inch 4K UHD Display, X1 4K Processor, Android TV with Google Assistant" data-image="sonybravia75.webp" data-url="https://www.flipkart.com/sony-bravia-189-cm-75-inch-ultra-hd-4k-smart-tv/p/itm2b9e2eeb9ab30">ADD TO CART</a>
+    <a href="https://www.flipkart.com/sony-bravia-189-cm-75-inch-ultra-hd-4k-led-smart-google-tv/p/itmf261bc78416a5?pid=TVSG4FNFDJHHBHJ8&lid=LSTTVSG4FNFDJHHBHJ8AENZQV&marketplace=FLIPKART&q=Sony+Bravia+75&store=ckf%2Fczl&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=bce69dde-0db6-454c-8d27-e8a5336eda65.TVSG4FNFDJHHBHJ8.SEARCH&ppt=sp&ppn=sp&ssid=07cgmqr2y80000001724922908215&qH=409f2660f969566d" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 4 -->
+<div class="product">
+    <a href="https://www.flipkart.com/acer-advanced-series-127-cm-50-inch-ultra-hd-4k-led-smart-google-tv-dolby-vision-atmos-36w-sound-output/p/itm9dbba8252dda7?pid=TVSGPGXBSZYUFSHY&lid=LSTTVSGPGXBSZYUFSHYXIWSNC&marketplace=FLIPKART&q=Acer+Advanced+50&store=ckf%2Fczl&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=312ff878-6afe-4158-9448-2a888f9f2178.TVSGPGXBSZYUFSHY.SEARCH&ppt=sp&ppn=sp&ssid=vpixydh79c0000001724923023266&qH=c732fca82f89f106" target="_blank"><img src="acer advanced.webp" alt="Acer Advanced 50 inch"></a>
+    <h3>Acer Advanced 50"</h3>
+    <p><span class="bold">Price:</span> ₹29,999</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>50 inch 4K UHD Display</li>
+            <li>Smart TV with Android 11</li>
+            <li>Dolby Audio</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/acer-advanced-series-127-cm-50-inch-ultra-hd-4k-led-smart-google-tv-dolby-vision-atmos-36w-sound-output/p/itm9dbba8252dda7?pid=TVSGPGXBSZYUFSHY&lid=LSTTVSGPGXBSZYUFSHYXIWSNC&marketplace=FLIPKART&q=Acer+Advanced+50&store=ckf%2Fczl&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=312ff878-6afe-4158-9448-2a888f9f2178.TVSGPGXBSZYUFSHY.SEARCH&ppt=sp&ppn=sp&ssid=vpixydh79c0000001724923023266&qH=c732fca82f89f106" class="btn-blue add-to-cart" data-name="Acer Advanced 50 inch" data-price="₹29,999" data-specs="50 inch 4K UHD Display, Smart TV with Android 11, Dolby Audio" data-image="acer advanced.webp" data-url="https://www.flipkart.com/acer-127-cm-50-inch-ultra-hd-4k-smart-led-tv/p/itm8dd07eced6e2f">ADD TO CART</a>
+    <a href="https://www.flipkart.com/acer-advanced-series-127-cm-50-inch-ultra-hd-4k-led-smart-google-tv-dolby-vision-atmos-36w-sound-output/p/itm9dbba8252dda7?pid=TVSGPGXBSZYUFSHY&lid=LSTTVSGPGXBSZYUFSHYXIWSNC&marketplace=FLIPKART&q=Acer+Advanced+50&store=ckf%2Fczl&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=312ff878-6afe-4158-9448-2a888f9f2178.TVSGPGXBSZYUFSHY.SEARCH&ppt=sp&ppn=sp&ssid=vpixydh79c0000001724923023266&qH=c732fca82f89f106" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 5 -->
+<div class="product">
+    <a href="https://www.flipkart.com/tcl-p71b-pro-138-71-cm-55-inch-qled-ultra-hd-4k-smart-google-tv-hands-free-voice-control-dolby-vision-atmos-dts-virtual-x-120hz-game-accelerator/p/itma153d7f9da6c4?pid=TVSGZHYN2MPRSHZV&lid=LSTTVSGZHYN2MPRSHZV0QIBO4&marketplace=FLIPKART&q=tcl+55+4k&store=ckf%2Fczl&srno=s_1_1&otracker=AS_QueryStore_OrganicAutoSuggest_1_9_na_na_ps&otracker1=AS_QueryStore_OrganicAutoSuggest_1_9_na_na_ps&fm=Search&iid=7f34fcc8-3c2a-49c0-bc2c-fac19e6744f9.TVSGZHYN2MPRSHZV.SEARCH&ppt=sp&ppn=sp&ssid=rcywvtmukg0000001724923176852&qH=45cec77a063aebe7" target="_blank"><img src="tcl4k55.webp" alt="TCL 4K 55 inch"></a>
+    <h3>TCL 4K 55"</h3>
+    <p><span class="bold">Price:</span> ₹39,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>55 inch 4K QLED Display</li>
+            <li>Smart TV with Android OS</li>
+            <li>Dolby Vision & Atmos</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/tcl-p71b-pro-138-71-cm-55-inch-qled-ultra-hd-4k-smart-google-tv-hands-free-voice-control-dolby-vision-atmos-dts-virtual-x-120hz-game-accelerator/p/itma153d7f9da6c4?pid=TVSGZHYN2MPRSHZV&lid=LSTTVSGZHYN2MPRSHZV0QIBO4&marketplace=FLIPKART&q=tcl+55+4k&store=ckf%2Fczl&srno=s_1_1&otracker=AS_QueryStore_OrganicAutoSuggest_1_9_na_na_ps&otracker1=AS_QueryStore_OrganicAutoSuggest_1_9_na_na_ps&fm=Search&iid=7f34fcc8-3c2a-49c0-bc2c-fac19e6744f9.TVSGZHYN2MPRSHZV.SEARCH&ppt=sp&ppn=sp&ssid=rcywvtmukg0000001724923176852&qH=45cec77a063aebe7" class="btn-blue add-to-cart" data-name="TCL 4K 55 inch" data-price="₹39,990" data-specs="55 inch 4K QLED Display, Smart TV with Android OS, Dolby Vision & Atmos" data-image="tcl4k55.webp" data-url="https://www.flipkart.com/tcl-139-cm-55-inch-ultra-hd-4k-smart-qled-tv/p/itm635c2c8e5c5c5">ADD TO CART</a>
+    <a href="https://www.flipkart.com/tcl-p71b-pro-138-71-cm-55-inch-qled-ultra-hd-4k-smart-google-tv-hands-free-voice-control-dolby-vision-atmos-dts-virtual-x-120hz-game-accelerator/p/itma153d7f9da6c4?pid=TVSGZHYN2MPRSHZV&lid=LSTTVSGZHYN2MPRSHZV0QIBO4&marketplace=FLIPKART&q=tcl+55+4k&store=ckf%2Fczl&srno=s_1_1&otracker=AS_QueryStore_OrganicAutoSuggest_1_9_na_na_ps&otracker1=AS_QueryStore_OrganicAutoSuggest_1_9_na_na_ps&fm=Search&iid=7f34fcc8-3c2a-49c0-bc2c-fac19e6744f9.TVSGZHYN2MPRSHZV.SEARCH&ppt=sp&ppn=sp&ssid=rcywvtmukg0000001724923176852&qH=45cec77a063aebe7" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+    </div>
+</section>
+
+
+
+
+<!-- Washing Machines Section -->
+<style>
+    .btn-blue, .btn-pink {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px 0;
+        border-radius: 5px;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 16px; /* Ensure consistent font size */
+        line-height: 1.5; /* Consistent line height */
+        transition: background-color 0.3s ease; /* Smooth transition */
+    }
+
+    .btn-blue {
+        background-color: #007bff;
+        color: #fff;
+    }
+    
+    .btn-blue:hover {
+        background-color: #0056b3;
+    }
+    
+    .btn-pink {
+        background-color: #e83e8c;
+        color: #fff;
+    }
+    
+    .btn-pink:hover {
+        background-color: #d63384;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .specifications {
+        position: relative;
+        padding-left: 30px; /* Space for custom bullet */
+    }
+
+    .specifications ul {
+        list-style-type: none; /* Remove default bullets */
+        margin: 0;
+        padding: 0;
+    }
+
+    .specifications li {
+        position: relative;
+        padding-left: 25px; /* Space for custom bullet */
+        margin-bottom: 5px; /* Space between items */
+    }
+
+    .specifications li::before {
+        content: "•"; /* Circle bullet */
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #333; /* Bullet color */
+        font-size: 1.2em; /* Adjust bullet size */
+    }
+
+    .product img {
+        width: 100%; /* Ensure images are responsive */
+        transition: transform 0.3s ease; /* Smooth zoom effect */
+    }
+
+    .product img:hover {
+        transform: scale(1.05); /* Slight zoom effect */
+    }
+
+    @media (max-width: 768px) {
+        .product {
+            margin-bottom: 20px; /* Space between products on smaller screens */
+        }
+    }
+</style>
+
+<style>
+    /* Section Heading */
+    #washing-machines h2 {
+        font-size: 28px;
+        text-align: center;
+        padding: 15px;
+        color: #0000FF; /* Deep blue color */
+        background: linear-gradient(to right, #ff7e5f, #feb47b);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Yellow underline */
+    #washing-machines h2::after {
+        content: "";
+        display: block;
+        width: 100px;
+        height: 4px;
+        background-color: #0a0901; /* Yellow color */
+        margin: 10px auto 0; /* Adjust spacing */
+        border-radius: 2px;
+    }
+    
+    /* Real-time effect */
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+        }
+        50% {
+            box-shadow: 0 0 20px rgba(255, 126, 95, 1);
+        }
+        100% {
+            box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+        }
+    }
+    
+    #washing-machines h2:hover {
+        animation: pulse 1.5s infinite;
+    }
+    </style>
+    
+
+
+<section id="washing-machines">
+    <h2>Washing Machines</h2>
+    <div class="product-section">
+        <!-- Product 1 -->
+<div class="product">
+    <a href="https://www.flipkart.com/lg-7-kg-5-star-steam-inverter-direct-drive-technology-6-motion-dd-touch-panel-1200-rpm-fully-automatic-front-load-washing-machine-in-built-heater-black-grey/p/itma76be56c71ca4?pid=WMNGKNNNFG7ZAZHS&lid=LSTWMNGKNNNFG7ZAZHS4B5ILT&marketplace=FLIPKART&q=LG+Front+Load&store=j9e%2Fabm%2F8qx&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=cf76bc8e-7b1d-4da5-b755-dd8361115c92.WMNGKNNNFG7ZAZHS.SEARCH&ppt=sp&ppn=sp&ssid=vpixydh79c0000001724923023266&qH=543ec14bcfcd6058">
+        <img src="lgfrontload.webp" alt="LG Front Load Washer">
+    </a>
+    <h3>LG Front Load</h3>
+    <p><span class="bold">Price:</span> ₹29,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>8 kg Capacity</li>
+            <li>Inverter Direct Drive</li>
+            <li>6 Motion Control Technology</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/lg-7-kg-5-star-steam-inverter-direct-drive-technology-6-motion-dd-touch-panel-1200-rpm-fully-automatic-front-load-washing-machine-in-built-heater-black-grey/p/itma76be56c71ca4?pid=WMNGKNNNFG7ZAZHS&lid=LSTWMNGKNNNFG7ZAZHS4B5ILT&marketplace=FLIPKART&q=LG+Front+Load&store=j9e%2Fabm%2F8qx&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=cf76bc8e-7b1d-4da5-b755-dd8361115c92.WMNGKNNNFG7ZAZHS.SEARCH&ppt=sp&ppn=sp&ssid=vpixydh79c0000001724923023266&qH=543ec14bcfcd6058" class="btn-blue add-to-cart" data-name="LG Front Load" data-price="₹29,990" data-specs="8 kg Capacity, Inverter Direct Drive, 6 Motion Control Technology" data-image="lgfrontload.webp" data-url="https://www.flipkart.com/lg-8-kg-fully-automatic-front-load-washing-machine/p/itmf49bb2c1cf8e2">ADD TO CART</a>
+    <a href="https://www.flipkart.com/lg-7-kg-5-star-steam-inverter-direct-drive-technology-6-motion-dd-touch-panel-1200-rpm-fully-automatic-front-load-washing-machine-in-built-heater-black-grey/p/itma76be56c71ca4?pid=WMNGKNNNFG7ZAZHS&lid=LSTWMNGKNNNFG7ZAZHS4B5ILT&marketplace=FLIPKART&q=LG+Front+Load&store=j9e%2Fabm%2F8qx&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=cf76bc8e-7b1d-4da5-b755-dd8361115c92.WMNGKNNNFG7ZAZHS.SEARCH&ppt=sp&ppn=sp&ssid=vpixydh79c0000001724923023266&qH=543ec14bcfcd6058" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 2 -->
+<div class="product">
+    <a href="https://www.flipkart.com/samsung-7-kg-5-star-ecobubble-digital-inverter-fully-automatic-top-load-washing-machine-grey/p/itmfad620b791ea9?pid=WMNGGUWZK6VEQPXD&lid=LSTWMNGGUWZK6VEQPXDEAEQN8&marketplace=FLIPKART&q=Samsung+Ecobubble&store=j9e%2Fabm%2F8qx&spotlightTagId=BestsellerId_j9e%2Fabm%2F8qx&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=7f691915-3650-417e-b6d4-e3063797dbcb.WMNGGUWZK6VEQPXD.SEARCH&ppt=sp&ppn=sp&ssid=maqtr52b800000001724925298898&qH=2944eeb1e3986a08">
+        <img src="samsungecobubble.webp" alt="Samsung Ecobubble">
+    </a>
+    <h3>Samsung Ecobubble</h3>
+    <p><span class="bold">Price:</span> ₹17,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>6 kg Capacity</li>
+            <li>EcoBubble Technology</li>
+            <li>Digital Inverter Motor</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/samsung-7-kg-5-star-ecobubble-digital-inverter-fully-automatic-top-load-washing-machine-grey/p/itmfad620b791ea9?pid=WMNGGUWZK6VEQPXD&lid=LSTWMNGGUWZK6VEQPXDEAEQN8&marketplace=FLIPKART&q=Samsung+Ecobubble&store=j9e%2Fabm%2F8qx&spotlightTagId=BestsellerId_j9e%2Fabm%2F8qx&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=7f691915-3650-417e-b6d4-e3063797dbcb.WMNGGUWZK6VEQPXD.SEARCH&ppt=sp&ppn=sp&ssid=maqtr52b800000001724925298898&qH=2944eeb1e3986a08" class="btn-blue add-to-cart" data-name="Samsung Ecobubble" data-price="₹17,990" data-specs="6 kg Capacity, EcoBubble Technology, Digital Inverter Motor" data-image="samsungecobubble.webp" data-url="https://www.flipkart.com/samsung-6-kg-fully-automatic-front-load-washing-machine/p/itm74f3c56ed5ab0">ADD TO CART</a>
+    <a href="https://www.flipkart.com/samsung-7-kg-5-star-ecobubble-digital-inverter-fully-automatic-top-load-washing-machine-grey/p/itmfad620b791ea9?pid=WMNGGUWZK6VEQPXD&lid=LSTWMNGGUWZK6VEQPXDEAEQN8&marketplace=FLIPKART&q=Samsung+Ecobubble&store=j9e%2Fabm%2F8qx&spotlightTagId=BestsellerId_j9e%2Fabm%2F8qx&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=7f691915-3650-417e-b6d4-e3063797dbcb.WMNGGUWZK6VEQPXD.SEARCH&ppt=sp&ppn=sp&ssid=maqtr52b800000001724925298898&qH=2944eeb1e3986a08" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 3 -->
+<div class="product">
+    <a href="https://www.flipkart.com/whirlpool-8-kg-5-star-auto-restart-end-cycle-buzzer-lint-filter-collar-scrubber-semi-automatic-top-load-washing-machine-black-grey/p/itm9805fdcb9aae1?pid=WMNGF9W8FRFYSYSN&lid=LSTWMNGF9W8FRFYSYSNF5U5UE&marketplace=FLIPKART&q=Whirlpool+Washer&store=j9e%2Fabm%2F8qx&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=c9746112-d558-4705-9cf4-3faab2ac8c59.WMNGF9W8FRFYSYSN.SEARCH&ppt=sp&ppn=sp&ssid=uth5n12h8g0000001724925449526&qH=b6b1cda9432db6a8">
+        <img src="whirlpoolwasher.webp" alt="Whirlpool Washer">
+    </a>
+    <h3>Whirlpool Washer</h3>
+    <p><span class="bold">Price:</span> ₹26,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>7 kg Capacity</li>
+            <li>6th Sense SoftMove Technology</li>
+            <li>Inverter Motor</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/whirlpool-8-kg-5-star-auto-restart-end-cycle-buzzer-lint-filter-collar-scrubber-semi-automatic-top-load-washing-machine-black-grey/p/itm9805fdcb9aae1?pid=WMNGF9W8FRFYSYSN&lid=LSTWMNGF9W8FRFYSYSNF5U5UE&marketplace=FLIPKART&q=Whirlpool+Washer&store=j9e%2Fabm%2F8qx&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=c9746112-d558-4705-9cf4-3faab2ac8c59.WMNGF9W8FRFYSYSN.SEARCH&ppt=sp&ppn=sp&ssid=uth5n12h8g0000001724925449526&qH=b6b1cda9432db6a8" class="btn-blue add-to-cart" data-name="Whirlpool Washer" data-price="₹26,990" data-specs="7 kg Capacity, 6th Sense SoftMove Technology, Inverter Motor" data-image="whirlpoolwasher.webp" data-url="https://www.flipkart.com/whirlpool-7-kg-fully-automatic-front-load-washing-machine/p/itmf490d3e0e1f52">ADD TO CART</a>
+    <a href="https://www.flipkart.com/whirlpool-8-kg-5-star-auto-restart-end-cycle-buzzer-lint-filter-collar-scrubber-semi-automatic-top-load-washing-machine-black-grey/p/itm9805fdcb9aae1?pid=WMNGF9W8FRFYSYSN&lid=LSTWMNGF9W8FRFYSYSNF5U5UE&marketplace=FLIPKART&q=Whirlpool+Washer&store=j9e%2Fabm%2F8qx&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=c9746112-d558-4705-9cf4-3faab2ac8c59.WMNGF9W8FRFYSYSN.SEARCH&ppt=sp&ppn=sp&ssid=uth5n12h8g0000001724925449526&qH=b6b1cda9432db6a8" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 4 -->
+<div class="product">
+    <a href="https://www.flipkart.com/bosch-7-kg-steam-fully-automatic-front-load-washing-machine-in-built-heater-black-grey/p/itmc6b048395362e?pid=WMNGSCF5WT77SY6E&lid=LSTWMNGSCF5WT77SY6EZNO9I4&marketplace=FLIPKART&q=bosch+washing+machine&store=j9e%2Fabm%2F8qx&spotlightTagId=FkPickId_j9e%2Fabm%2F8qx&srno=s_1_2&otracker=AS_QueryStore_OrganicAutoSuggest_1_16_na_na_na&otracker1=AS_QueryStore_OrganicAutoSuggest_1_16_na_na_na&fm=search-autosuggest&iid=b4df0d2f-3e25-4edf-a405-2bc44117094a.WMNGSCF5WT77SY6E.SEARCH&ppt=sp&ppn=sp&ssid=lnbij8bvps0000001724925563426&qH=dfd4fed427a87878">
+        <img src="boschwasher.webp" alt="Bosch Washer">
+    </a>
+    <h3>Bosch Washer</h3>
+    <p><span class="bold">Price:</span> ₹34,900</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>7 kg Capacity</li>
+            <li>EcoSilence Drive</li>
+            <li>ActiveWater Plus</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/bosch-7-kg-steam-fully-automatic-front-load-washing-machine-in-built-heater-black-grey/p/itmc6b048395362e?pid=WMNGSCF5WT77SY6E&lid=LSTWMNGSCF5WT77SY6EZNO9I4&marketplace=FLIPKART&q=bosch+washing+machine&store=j9e%2Fabm%2F8qx&spotlightTagId=FkPickId_j9e%2Fabm%2F8qx&srno=s_1_2&otracker=AS_QueryStore_OrganicAutoSuggest_1_16_na_na_na&otracker1=AS_QueryStore_OrganicAutoSuggest_1_16_na_na_na&fm=search-autosuggest&iid=b4df0d2f-3e25-4edf-a405-2bc44117094a.WMNGSCF5WT77SY6E.SEARCH&ppt=sp&ppn=sp&ssid=lnbij8bvps0000001724925563426&qH=dfd4fed427a87878" class="btn-blue add-to-cart" data-name="Bosch Washer" data-price="₹34,900" data-specs="7 kg Capacity, EcoSilence Drive, ActiveWater Plus" data-image="boschwasher.webp" data-url="https://www.flipkart.com/bosch-7-kg-fully-automatic-front-load-washing-machine/p/itm7ae95c4e2b78d">ADD TO CART</a>
+    <a href="https://www.flipkart.com/bosch-7-kg-steam-fully-automatic-front-load-washing-machine-in-built-heater-black-grey/p/itmc6b048395362e?pid=WMNGSCF5WT77SY6E&lid=LSTWMNGSCF5WT77SY6EZNO9I4&marketplace=FLIPKART&q=bosch+washing+machine&store=j9e%2Fabm%2F8qx&spotlightTagId=FkPickId_j9e%2Fabm%2F8qx&srno=s_1_2&otracker=AS_QueryStore_OrganicAutoSuggest_1_16_na_na_na&otracker1=AS_QueryStore_OrganicAutoSuggest_1_16_na_na_na&fm=search-autosuggest&iid=b4df0d2f-3e25-4edf-a405-2bc44117094a.WMNGSCF5WT77SY6E.SEARCH&ppt=sp&ppn=sp&ssid=lnbij8bvps0000001724925563426&qH=dfd4fed427a87878" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 5 -->
+<div class="product">
+    <a href="https://www.flipkart.com/ifb-6-kg-fully-automatic-front-load-washing-machine-in-built-heater-black-white/p/itmb860e90c8ce6c?pid=WMNGX3G7GK4DB52V&lid=LSTWMNGX3G7GK4DB52VJW6GDH&marketplace=FLIPKART&q=IFB+Front+Load&store=search.flipkart.com&srno=s_1_3&otracker=search&otracker1=search&fm=search-autosuggest&iid=318dac93-30f2-47b8-a672-5f29f938e61d.WMNGX3G7GK4DB52V.SEARCH&ppt=pp&ppn=pp&ssid=7s3gqg0vuo0000001724925656600&qH=c55f6bd7d4a0c011">
+        <img src="ifbfrontload.webp" alt="IFB Front Load Washer">
+    </a>
+    <h3>IFB Front Load</h3>
+    <p><span class="bold">Price:</span> ₹21,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>6 kg Capacity</li>
+            <li>Aqua Energie</li>
+            <li>Crescent Moon Drum</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/ifb-6-kg-fully-automatic-front-load-washing-machine-in-built-heater-black-white/p/itmb860e90c8ce6c?pid=WMNGX3G7GK4DB52V&lid=LSTWMNGX3G7GK4DB52VJW6GDH&marketplace=FLIPKART&q=IFB+Front+Load&store=search.flipkart.com&srno=s_1_3&otracker=search&otracker1=search&fm=search-autosuggest&iid=318dac93-30f2-47b8-a672-5f29f938e61d.WMNGX3G7GK4DB52V.SEARCH&ppt=pp&ppn=pp&ssid=7s3gqg0vuo0000001724925656600&qH=c55f6bd7d4a0c011" class="btn-blue add-to-cart" data-name="IFB Front Load" data-price="₹21,990" data-specs="6 kg Capacity, Aqua Energie, Crescent Moon Drum" data-image="ifbfrontload.webp" data-url="https://www.flipkart.com/ifb-6-kg-fully-automatic-front-load-washing-machine/p/itm5bf88c6e99d42">ADD TO CART</a>
+    <a href="https://www.flipkart.com/ifb-6-kg-fully-automatic-front-load-washing-machine-in-built-heater-black-white/p/itmb860e90c8ce6c?pid=WMNGX3G7GK4DB52V&lid=LSTWMNGX3G7GK4DB52VJW6GDH&marketplace=FLIPKART&q=IFB+Front+Load&store=search.flipkart.com&srno=s_1_3&otracker=search&otracker1=search&fm=search-autosuggest&iid=318dac93-30f2-47b8-a672-5f29f938e61d.WMNGX3G7GK4DB52V.SEARCH&ppt=pp&ppn=pp&ssid=7s3gqg0vuo0000001724925656600&qH=c55f6bd7d4a0c011" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+    </div>
+</section>
+
+
+
+
+
+<!-- CAMERAS Section -->
+<style>
+    .btn-blue, .btn-pink {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px 0;
+        border-radius: 5px;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 16px; /* Ensure consistent font size */
+        line-height: 1.5; /* Consistent line height */
+        transition: background-color 0.3s ease; /* Smooth transition */
+    }
+
+    .btn-blue {
+        background-color: #007bff;
+        color: #fff;
+    }
+    
+    .btn-blue:hover {
+        background-color: #0056b3;
+    }
+    
+    .btn-pink {
+        background-color: #e83e8c;
+        color: #fff;
+    }
+    
+    .btn-pink:hover {
+        background-color: #d63384;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .specifications {
+        position: relative;
+        padding-left: 30px; /* Space for custom bullet */
+    }
+
+    .specifications ul {
+        list-style-type: none; /* Remove default bullets */
+        margin: 0;
+        padding: 0;
+    }
+
+    .specifications li {
+        position: relative;
+        padding-left: 25px; /* Space for custom bullet */
+        margin-bottom: 5px; /* Space between items */
+    }
+
+    .specifications li::before {
+        content: "•"; /* Circle bullet */
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #333; /* Bullet color */
+        font-size: 1.2em; /* Adjust bullet size */
+    }
+
+    .product img {
+        width: 100%; /* Ensure images are responsive */
+        transition: transform 0.3s ease; /* Smooth zoom effect */
+    }
+
+    .product img:hover {
+        transform: scale(1.05); /* Slight zoom effect */
+    }
+
+    @media (max-width: 768px) {
+        .product {
+            margin-bottom: 20px; /* Space between products on smaller screens */
+        }
+    }
+</style>
+
+<style>
+    /* Section Heading */
+    #cameras h2 {
+        font-size: 28px;
+        text-align: center;
+        padding: 15px;
+        color: #0000FF; /* Deep blue color */
+        background: linear-gradient(to right, #ff7e5f, #feb47b);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Yellow underline */
+    #cameras h2::after {
+        content: "";
+        display: block;
+        width: 100px;
+        height: 4px;
+        background-color: #0a0901; /* Yellow color */
+        margin: 10px auto 0; /* Adjust spacing */
+        border-radius: 2px;
+    }
+    
+    /* Real-time effect */
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+        }
+        50% {
+            box-shadow: 0 0 20px rgba(255, 126, 95, 1);
+        }
+        100% {
+            box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+        }
+    }
+    
+    #cameras h2:hover {
+        animation: pulse 1.5s infinite;
+    }
+    </style>
+    
+
+<section id="cameras">
+    <h2>Cameras</h2>
+    <div class="product-section">
+        <!-- Product 1 -->
+<div class="product">
+    <a href="https://www.flipkart.com/canon-eos-3000d-dslr-camera-1-body-18-55-mm-lens/p/itm1f4ad2d1ba230?pid=CAMF3DHJURPEMNRN&lid=LSTCAMF3DHJURPEMNRNBKP0RG&marketplace=FLIPKART&q=Canon+EOS+3000D&store=jek%2Fp31%2Ftrv&spotlightTagId=FkPickId_jek%2Fp31%2Ftrv&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=f21511fd-0b6c-4955-bea5-96d598fa7e7f.CAMF3DHJURPEMNRN.SEARCH&ppt=sp&ppn=sp&ssid=gp87n5gb680000001724925775688&qH=84b939a1076e4080">
+        <img src="canoseos3000d.webp" alt="Canon EOS 3000D">
+    </a>
+    <h3>Canon EOS 3000D</h3>
+    <p><span class="bold">Price:</span> ₹34,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>18 MP APS-C CMOS Sensor</li>
+            <li>9-point AF System</li>
+            <li>Full HD Video Recording</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/canon-eos-3000d-dslr-camera-1-body-18-55-mm-lens/p/itm1f4ad2d1ba230?pid=CAMF3DHJURPEMNRN&lid=LSTCAMF3DHJURPEMNRNBKP0RG&marketplace=FLIPKART&q=Canon+EOS+3000D&store=jek%2Fp31%2Ftrv&spotlightTagId=FkPickId_jek%2Fp31%2Ftrv&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=f21511fd-0b6c-4955-bea5-96d598fa7e7f.CAMF3DHJURPEMNRN.SEARCH&ppt=sp&ppn=sp&ssid=gp87n5gb680000001724925775688&qH=84b939a1076e4080" class="btn-blue add-to-cart" data-name="Canon EOS 3000D" data-price="₹34,990" data-specs="18 MP APS-C CMOS Sensor, 9-point AF System, Full HD Video Recording" data-image="canoseos3000d.webp" data-url="https://www.flipkart.com/canon-eos-3000d-dslr-camera-body-18-55-mm-lens/p/itmf3w3vbhmeekz7">ADD TO CART</a>
+    <a href="https://www.flipkart.com/canon-eos-3000d-dslr-camera-1-body-18-55-mm-lens/p/itm1f4ad2d1ba230?pid=CAMF3DHJURPEMNRN&lid=LSTCAMF3DHJURPEMNRNBKP0RG&marketplace=FLIPKART&q=Canon+EOS+3000D&store=jek%2Fp31%2Ftrv&spotlightTagId=FkPickId_jek%2Fp31%2Ftrv&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=f21511fd-0b6c-4955-bea5-96d598fa7e7f.CAMF3DHJURPEMNRN.SEARCH&ppt=sp&ppn=sp&ssid=gp87n5gb680000001724925775688&qH=84b939a1076e4080" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 2 -->
+<div class="product">
+    <a href="https://www.flipkart.com/nikon-d850-dslr-camera-body-only/p/itm67ace0c4a825f?pid=DLLF65NSFMNPVPXD&lid=LSTDLLF65NSFMNPVPXDPQPSMO&marketplace=FLIPKART&q=Nikon+D850&store=jek%2Fp31%2Ftrv&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=e2031c5b-8b1f-4266-87f2-4d8161be14af.DLLF65NSFMNPVPXD.SEARCH&ppt=sp&ppn=sp&ssid=qgvrt1243k0000001724925831910&qH=da7de38724300a1f">
+        <img src="nikon850.webp" alt="Nikon D850">
+    </a>
+    <h3>Nikon D850</h3>
+    <p><span class="bold">Price:</span> ₹2,19,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>45.7 MP FX-Format CMOS Sensor</li>
+            <li>153-point AF System</li>
+            <li>4K UHD Video Recording</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/nikon-d850-dslr-camera-body-only/p/itm67ace0c4a825f?pid=DLLF65NSFMNPVPXD&lid=LSTDLLF65NSFMNPVPXDPQPSMO&marketplace=FLIPKART&q=Nikon+D850&store=jek%2Fp31%2Ftrv&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=e2031c5b-8b1f-4266-87f2-4d8161be14af.DLLF65NSFMNPVPXD.SEARCH&ppt=sp&ppn=sp&ssid=qgvrt1243k0000001724925831910&qH=da7de38724300a1f" class="btn-blue add-to-cart" data-name="Nikon D850" data-price="₹2,19,990" data-specs="45.7 MP FX-Format CMOS Sensor, 153-point AF System, 4K UHD Video Recording" data-image="nikon850.webp" data-url="https://www.flipkart.com/nikon-d850-dslr-camera-body/p/itmf3z5zbpvjgmmz">ADD TO CART</a>
+    <a href="https://www.flipkart.com/nikon-d850-dslr-camera-body-only/p/itm67ace0c4a825f?pid=DLLF65NSFMNPVPXD&lid=LSTDLLF65NSFMNPVPXDPQPSMO&marketplace=FLIPKART&q=Nikon+D850&store=jek%2Fp31%2Ftrv&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=e2031c5b-8b1f-4266-87f2-4d8161be14af.DLLF65NSFMNPVPXD.SEARCH&ppt=sp&ppn=sp&ssid=qgvrt1243k0000001724925831910&qH=da7de38724300a1f" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 3 -->
+<div class="product">
+    <a href="https://www.flipkart.com/sony-alpha-ilce-7m3k-full-frame-mirrorless-camera-28-70-mm-zoom-lensfeaturing-eye-af-4k-movie-recording/p/itm562f7f32aeb3b?pid=DLLF7GBGWYNB5SZK&lid=LSTDLLF7GBGWYNB5SZKG040ZJ&marketplace=FLIPKART&q=Sony+A7+III&store=jek%2Fp31%2Ftrv&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=c2aa1f39-abe5-4cd0-a7da-a71566c89ae3.DLLF7GBGWYNB5SZK.SEARCH&ppt=pp&ppn=pp&ssid=cnlws5yeo00000001724925893343&qH=bd620d9a9bda8692">
+        <img src="sonycamera.webp" alt="Sony A7 III">
+    </a>
+    <h3>Sony A7 III</h3>
+    <p><span class="bold">Price:</span> ₹1,41,490</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>24.2 MP Full-Frame Sensor</li>
+            <li>693-point AF System</li>
+            <li>4K HDR Video Recording</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/sony-alpha-ilce-7m3k-full-frame-mirrorless-camera-28-70-mm-zoom-lensfeaturing-eye-af-4k-movie-recording/p/itm562f7f32aeb3b?pid=DLLF7GBGWYNB5SZK&lid=LSTDLLF7GBGWYNB5SZKG040ZJ&marketplace=FLIPKART&q=Sony+A7+III&store=jek%2Fp31%2Ftrv&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=c2aa1f39-abe5-4cd0-a7da-a71566c89ae3.DLLF7GBGWYNB5SZK.SEARCH&ppt=pp&ppn=pp&ssid=cnlws5yeo00000001724925893343&qH=bd620d9a9bda8692" class="btn-blue add-to-cart" data-name="Sony A7 III" data-price="₹1,41,490" data-specs="24.2 MP Full-Frame Sensor, 693-point AF System, 4K HDR Video Recording" data-image="sonycamera.webp" data-url="https://www.flipkart.com/sony-alpha-ilce-7m3-mirrorless-camera-body/p/itmdb70cda3d8c7b">ADD TO CART</a>
+    <a href="https://www.flipkart.com/sony-alpha-ilce-7m3k-full-frame-mirrorless-camera-28-70-mm-zoom-lensfeaturing-eye-af-4k-movie-recording/p/itm562f7f32aeb3b?pid=DLLF7GBGWYNB5SZK&lid=LSTDLLF7GBGWYNB5SZKG040ZJ&marketplace=FLIPKART&q=Sony+A7+III&store=jek%2Fp31%2Ftrv&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=c2aa1f39-abe5-4cd0-a7da-a71566c89ae3.DLLF7GBGWYNB5SZK.SEARCH&ppt=pp&ppn=pp&ssid=cnlws5yeo00000001724925893343&qH=bd620d9a9bda8692" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 4 -->
+<div class="product">
+    <a href="https://www.flipkart.com/fujifilm-x-series-x-t4-mirrorless-camera-body-xf-18-55mm-lens/p/itma098f66d671dd?pid=DLLFV9XTZHZGMCDY&lid=LSTDLLFV9XTZHZGMCDY3KWHXV&marketplace=FLIPKART&q=Fujifilm+X-T4&store=jek&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=0b1ee382-118c-4fae-a5d5-bd611466979c.DLLFV9XTZHZGMCDY.SEARCH&ppt=sp&ppn=sp&ssid=hks687tjvk0000001724926010799&qH=1750646e489e3761">
+        <img src="fujifilmcamera.webp" alt="Fujifilm X-T4">
+    </a>
+    <h3>Fujifilm X-T4</h3>
+    <p><span class="bold">Price:</span> ₹1,49,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>26.1 MP X-Trans CMOS 4 Sensor</li>
+            <li>425-point Phase Detection AF</li>
+            <li>4K DCI Video Recording</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/fujifilm-x-series-x-t4-mirrorless-camera-body-xf-18-55mm-lens/p/itma098f66d671dd?pid=DLLFV9XTZHZGMCDY&lid=LSTDLLFV9XTZHZGMCDY3KWHXV&marketplace=FLIPKART&q=Fujifilm+X-T4&store=jek&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=0b1ee382-118c-4fae-a5d5-bd611466979c.DLLFV9XTZHZGMCDY.SEARCH&ppt=sp&ppn=sp&ssid=hks687tjvk0000001724926010799&qH=1750646e489e3761" class="btn-blue add-to-cart" data-name="Fujifilm X-T4" data-price="₹1,49,990" data-specs="26.1 MP X-Trans CMOS 4 Sensor, 425-point Phase Detection AF, 4K DCI Video Recording" data-image="fujifilmcamera.webp" data-url="https://www.flipkart.com/fujifilm-x-series-x-t4-mirrorless-camera-body-xf-18-55mm-lens/p/itma098f66d671dd?pid=DLLFV9XTZHZGMCDY&lid=LSTDLLFV9XTZHZGMCDY3KWHXV&marketplace=FLIPKART&q=Fujifilm+X-T4&store=jek&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=0b1ee382-118c-4fae-a5d5-bd611466979c.DLLFV9XTZHZGMCDY.SEARCH&ppt=sp&ppn=sp&ssid=hks687tjvk0000001724926010799&qH=1750646e489e3761">ADD TO CART</a>
+    <a href="https://www.flipkart.com/fujifilm-x-series-x-t4-mirrorless-camera-body-xf-18-55mm-lens/p/itma098f66d671dd?pid=DLLFV9XTZHZGMCDY&lid=LSTDLLFV9XTZHZGMCDY3KWHXV&marketplace=FLIPKART&q=Fujifilm+X-T4&store=jek&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=0b1ee382-118c-4fae-a5d5-bd611466979c.DLLFV9XTZHZGMCDY.SEARCH&ppt=sp&ppn=sp&ssid=hks687tjvk0000001724926010799&qH=1750646e489e3761" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 5 -->
+<div class="product">
+    <a href="https://www.flipkart.com/olympus-om-system-tg-7-red-dslr-camera/p/itm07f8e9a0530fa?pid=DLLGUW8UJ2FP4HXY&lid=LSTDLLGUW8UJ2FP4HXYRMFX50&marketplace=FLIPKART&q=OLYMPUS+OM+SYSTEM+TG-7&store=search.flipkart.com&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=04e1ffa2-8899-4ce5-be48-2650e26dc72a.DLLGUW8UJ2FP4HXY.SEARCH&ppt=sp&ppn=sp&ssid=708t960jg00000001724933532057&qH=8e15b0b1f4f88bcd">
+        <img src="olympuscamera.webp" alt="OLYMPUS OM SYSTEM TG-7">
+    </a>
+    <h3>OLYMPUS OM SYSTEM TG-7</h3>
+    <p><span class="bold">Price:</span> ₹52,999</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>12 MP BSI CMOS Sensor</li>
+            <li>4K Video Recording</li>
+            <li>Waterproof, Dustproof, Freezeproof, Shockproof</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/olympus-om-system-tg-7-red-dslr-camera/p/itm07f8e9a0530fa?pid=DLLGUW8UJ2FP4HXY&lid=LSTDLLGUW8UJ2FP4HXYRMFX50&marketplace=FLIPKART&q=OLYMPUS+OM+SYSTEM+TG-7&store=search.flipkart.com&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=04e1ffa2-8899-4ce5-be48-2650e26dc72a.DLLGUW8UJ2FP4HXY.SEARCH&ppt=sp&ppn=sp&ssid=708t960jg00000001724933532057&qH=8e15b0b1f4f88bcd" class="btn-blue add-to-cart" data-name="OLYMPUS OM SYSTEM TG-7" data-price="₹52,999" data-specs="12 MP BSI CMOS Sensor, 4K Video Recording, Waterproof, Dustproof, Freezeproof, Shockproof" data-image="olympuscamera.webp" data-url="https://www.flipkart.com/olympus-om-system-tg-7-red-dslr-camera/p/itm07f8e9a0530fa?pid=DLLGUW8UJ2FP4HXY&lid=LSTDLLGUW8UJ2FP4HXYRMFX50&marketplace=FLIPKART&q=OLYMPUS+OM+SYSTEM+TG-7&store=search.flipkart.com&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=04e1ffa2-8899-4ce5-be48-2650e26dc72a.DLLGUW8UJ2FP4HXY.SEARCH&ppt=sp&ppn=sp&ssid=708t960jg00000001724933532057&qH=8e15b0b1f4f88bcd">ADD TO CART</a>
+    <a href="https://www.flipkart.com/olympus-om-system-tg-7-red-dslr-camera/p/itm07f8e9a0530fa?pid=DLLGUW8UJ2FP4HXY&lid=LSTDLLGUW8UJ2FP4HXYRMFX50&marketplace=FLIPKART&q=OLYMPUS+OM+SYSTEM+TG-7&store=search.flipkart.com&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=04e1ffa2-8899-4ce5-be48-2650e26dc72a.DLLGUW8UJ2FP4HXY.SEARCH&ppt=sp&ppn=sp&ssid=708t960jg00000001724933532057&qH=8e15b0b1f4f88bcd" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+    </div>
+</section>
+
+
+
+
+
+
+<!-- Air Conditioners Section -->
+<style>
+    .btn-blue, .btn-pink {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px 0;
+        border-radius: 5px;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 16px; /* Ensure consistent font size */
+        line-height: 1.5; /* Consistent line height */
+        transition: background-color 0.3s ease; /* Smooth transition */
+    }
+
+    .btn-blue {
+        background-color: #007bff;
+        color: #fff;
+    }
+    
+    .btn-blue:hover {
+        background-color: #0056b3;
+    }
+    
+    .btn-pink {
+        background-color: #e83e8c;
+        color: #fff;
+    }
+    
+    .btn-pink:hover {
+        background-color: #d63384;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .specifications {
+        position: relative;
+        padding-left: 30px; /* Space for custom bullet */
+    }
+
+    .specifications ul {
+        list-style-type: none; /* Remove default bullets */
+        margin: 0;
+        padding: 0;
+    }
+
+    .specifications li {
+        position: relative;
+        padding-left: 25px; /* Space for custom bullet */
+        margin-bottom: 5px; /* Space between items */
+    }
+
+    .specifications li::before {
+        content: "•"; /* Circle bullet */
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #333; /* Bullet color */
+        font-size: 1.2em; /* Adjust bullet size */
+    }
+
+    .product img {
+        width: 100%; /* Ensure images are responsive */
+        transition: transform 0.3s ease; /* Smooth zoom effect */
+    }
+
+    .product img:hover {
+        transform: scale(1.05); /* Slight zoom effect */
+    }
+
+    @media (max-width: 768px) {
+        .product {
+            margin-bottom: 20px; /* Space between products on smaller screens */
+        }
+    }
+</style>
+
+<style>
+    /* Section Heading */
+    #air-conditioners h2 {
+        font-size: 28px;
+        text-align: center;
+        padding: 15px;
+        color: #0000FF; /* Deep blue color */
+        background: linear-gradient(to right, #ff7e5f, #feb47b);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Yellow underline */
+    #air-conditioners h2::after {
+        content: "";
+        display: block;
+        width: 100px;
+        height: 4px;
+        background-color: #0a0901; /* Yellow color */
+        margin: 10px auto 0; /* Adjust spacing */
+        border-radius: 2px;
+    }
+    
+    /* Real-time effect */
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+        }
+        50% {
+            box-shadow: 0 0 20px rgba(255, 126, 95, 1);
+        }
+        100% {
+            box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+        }
+    }
+    
+    #air-conditioners h2:hover {
+        animation: pulse 1.5s infinite;
+    }
+    </style>
+    
+
+
+<section id="air-conditioners">
+    <h2>Air Conditioners</h2>
+    <div class="product-section">
+       <!-- Product 1 -->
+<div class="product">
+    <a href="https://www.flipkart.com/daikin-2023-model-1-5-ton-3-star-split-inverter-ac-pm-2-5-filter-white/p/itm8a115d191dc36?pid=ACNGFSYTSYRUQUSZ&lid=LSTACNGFSYTSYRUQUSZSN5JY4&marketplace=FLIPKART&q=Daikin+1.5+Ton+Split+AC&store=j9e%2Fabm%2Fc54&spotlightTagId=FkPickId_j9e%2Fabm%2Fc54&srno=s_1_4&otracker=search&otracker1=search&fm=Search&iid=c4b2378c-c09a-48ca-8824-8b7f346efe93.ACNGFSYTSYRUQUSZ.SEARCH&ppt=sp&ppn=sp&qH=3b07db665b7f6a1a">
+        <img src="daikinac.webp" alt="Daikin 1.5 Ton Split AC">
+    </a>
+    <h3>Daikin 1.5 Ton Split AC</h3>
+    <p><span class="bold">Price:</span> ₹36,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>1.5 Ton Capacity</li>
+            <li>5 Star Energy Rating</li>
+            <li>Inverter Compressor</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/daikin-2023-model-1-5-ton-3-star-split-inverter-ac-pm-2-5-filter-white/p/itm8a115d191dc36?pid=ACNGFSYTSYRUQUSZ&lid=LSTACNGFSYTSYRUQUSZSN5JY4&marketplace=FLIPKART&q=Daikin+1.5+Ton+Split+AC&store=j9e%2Fabm%2Fc54&spotlightTagId=FkPickId_j9e%2Fabm%2Fc54&srno=s_1_4&otracker=search&otracker1=search&fm=Search&iid=c4b2378c-c09a-48ca-8824-8b7f346efe93.ACNGFSYTSYRUQUSZ.SEARCH&ppt=sp&ppn=sp&qH=3b07db665b7f6a1a" class="btn-blue add-to-cart" data-name="Daikin 1.5 Ton Split AC" data-price="₹36,990" data-specs="1.5 Ton Capacity, 5 Star Energy Rating, Inverter Compressor" data-image="daikinac.webp" data-url="https://www.flipkart.com/daikin-2023-model-1-5-ton-3-star-split-inverter-ac-pm-2-5-filter-white/p/itm8a115d191dc36?pid=ACNGFSYTSYRUQUSZ&lid=LSTACNGFSYTSYRUQUSZSN5JY4&marketplace=FLIPKART&q=Daikin+1.5+Ton+Split+AC&store=j9e%2Fabm%2Fc54&spotlightTagId=FkPickId_j9e%2Fabm%2Fc54&srno=s_1_4&otracker=search&otracker1=search&fm=Search&iid=c4b2378c-c09a-48ca-8824-8b7f346efe93.ACNGFSYTSYRUQUSZ.SEARCH&ppt=sp&ppn=sp&qH=3b07db665b7f6a1a">ADD TO CART</a>
+    <a href="https://www.flipkart.com/daikin-2023-model-1-5-ton-3-star-split-inverter-ac-pm-2-5-filter-white/p/itm8a115d191dc36?pid=ACNGFSYTSYRUQUSZ&lid=LSTACNGFSYTSYRUQUSZSN5JY4&marketplace=FLIPKART&q=Daikin+1.5+Ton+Split+AC&store=j9e%2Fabm%2Fc54&spotlightTagId=FkPickId_j9e%2Fabm%2Fc54&srno=s_1_4&otracker=search&otracker1=search&fm=Search&iid=c4b2378c-c09a-48ca-8824-8b7f346efe93.ACNGFSYTSYRUQUSZ.SEARCH&ppt=sp&ppn=sp&qH=3b07db665b7f6a1a" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 2 -->
+<div class="product">
+    <a href="https://www.flipkart.com/lg-ai-convertible-6-in-1-cooling-2024-model-2-ton-3-star-split-dual-inverter-4-way-swing-hd-filter-anti-virus-protection-viraat-mode-adc-sensor-ac-white/p/itm5e95ad3ec44f5?pid=ACNGWEQUFPQ3PHZJ&lid=LSTACNGWEQUFPQ3PHZJEOJLM2&marketplace=FLIPKART&q=LG+Dual+2+Ton+Inverter+AC+52900&store=j9e%2Fabm%2Fc54&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=0f7985a6-6729-4769-833f-4c9d92026e01.ACNGWEQUFPQ3PHZJ.SEARCH&ppt=sp&ppn=sp&ssid=ryb42wit6o0000001724934267151&qH=6b10f39561f1d135">
+        <img src="lgdualac.webp" alt="LG Dual 2 Ton Inverter AC">
+    </a>
+    <h3>LG Dual 2 Ton Inverter AC</h3>
+    <p><span class="bold">Price:</span> ₹52,990</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>2 Ton Capacity</li>
+            <li>5 Star Energy Rating</li>
+            <li>Dual Inverter Compressor</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/lg-ai-convertible-6-in-1-cooling-2024-model-2-ton-3-star-split-dual-inverter-4-way-swing-hd-filter-anti-virus-protection-viraat-mode-adc-sensor-ac-white/p/itm5e95ad3ec44f5?pid=ACNGWEQUFPQ3PHZJ&lid=LSTACNGWEQUFPQ3PHZJEOJLM2&marketplace=FLIPKART&q=LG+Dual+2+Ton+Inverter+AC+52900&store=j9e%2Fabm%2Fc54&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=0f7985a6-6729-4769-833f-4c9d92026e01.ACNGWEQUFPQ3PHZJ.SEARCH&ppt=sp&ppn=sp&ssid=ryb42wit6o0000001724934267151&qH=6b10f39561f1d135" class="btn-blue add-to-cart" data-name="LG Dual 2 Ton Inverter AC" data-price="₹52,990" data-specs="2 Ton Capacity, 5 Star Energy Rating, Dual Inverter Compressor" data-image="lgdualac.webp" data-url="https://www.flipkart.com/lg-ai-convertible-6-in-1-cooling-2024-model-2-ton-3-star-split-dual-inverter-4-way-swing-hd-filter-anti-virus-protection-viraat-mode-adc-sensor-ac-white/p/itm5e95ad3ec44f5?pid=ACNGWEQUFPQ3PHZJ&lid=LSTACNGWEQUFPQ3PHZJEOJLM2&marketplace=FLIPKART&q=LG+Dual+2+Ton+Inverter+AC+52900&store=j9e%2Fabm%2Fc54&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=0f7985a6-6729-4769-833f-4c9d92026e01.ACNGWEQUFPQ3PHZJ.SEARCH&ppt=sp&ppn=sp&ssid=ryb42wit6o0000001724934267151&qH=6b10f39561f1d135">ADD TO CART</a>
+    <a href="https://www.flipkart.com/lg-ai-convertible-6-in-1-cooling-2024-model-2-ton-3-star-split-dual-inverter-4-way-swing-hd-filter-anti-virus-protection-viraat-mode-adc-sensor-ac-white/p/itm5e95ad3ec44f5?pid=ACNGWEQUFPQ3PHZJ&lid=LSTACNGWEQUFPQ3PHZJEOJLM2&marketplace=FLIPKART&q=LG+Dual+2+Ton+Inverter+AC+52900&store=j9e%2Fabm%2Fc54&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=0f7985a6-6729-4769-833f-4c9d92026e01.ACNGWEQUFPQ3PHZJ.SEARCH&ppt=sp&ppn=sp&ssid=ryb42wit6o0000001724934267151&qH=6b10f39561f1d135" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 3 -->
+<div class="product">
+    <a href="https://www.flipkart.com/hitachi-1-5-ton-5-star-split-inverter-ac-white/p/itm55d380871f7c8?pid=ACNGZV7QFAPUBTAE&lid=LSTACNGZV7QFAPUBTAEIIATHU&marketplace=FLIPKART&q=hitachi+1.5+ton+split+ac+&store=j9e%2Fabm%2Fc54&srno=s_1_20&otracker=search&otracker1=search&fm=search-autosuggest&iid=23000b32-db29-4c1d-bb21-bbd483a1dd0a.ACNGZV7QFAPUBTAE.SEARCH&ppt=sp&ppn=sp&ssid=03jb00f8z40000001724934433422&qH=f39f9fa309488ac1">
+        <img src="hitachisplitac.webp" alt="Hitachi Split AC">
+    </a>
+    <h3>Hitachi Split AC</h3>
+    <p><span class="bold">Price:</span> ₹46,950</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>1.5 Ton Capacity</li>
+            <li>5 Star Energy Rating</li>
+            <li>Inverter Compressor</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/hitachi-1-5-ton-5-star-split-inverter-ac-white/p/itm55d380871f7c8?pid=ACNGZV7QFAPUBTAE&lid=LSTACNGZV7QFAPUBTAEIIATHU&marketplace=FLIPKART&q=hitachi+1.5+ton+split+ac+&store=j9e%2Fabm%2Fc54&srno=s_1_20&otracker=search&otracker1=search&fm=search-autosuggest&iid=23000b32-db29-4c1d-bb21-bbd483a1dd0a.ACNGZV7QFAPUBTAE.SEARCH&ppt=sp&ppn=sp&ssid=03jb00f8z40000001724934433422&qH=f39f9fa309488ac1" class="btn-blue add-to-cart" data-name="Hitachi Split AC" data-price="₹41,990" data-specs="1.5 Ton Capacity, 5 Star Energy Rating, Inverter Compressor" data-image="hitachisplitac.webp" data-url="https://www.flipkart.com/hitachi-1-5-ton-5-star-split-inverter-ac-white/p/itm55d380871f7c8?pid=ACNGZV7QFAPUBTAE&lid=LSTACNGZV7QFAPUBTAEIIATHU&marketplace=FLIPKART&q=hitachi+1.5+ton+split+ac+&store=j9e%2Fabm%2Fc54&srno=s_1_20&otracker=search&otracker1=search&fm=search-autosuggest&iid=23000b32-db29-4c1d-bb21-bbd483a1dd0a.ACNGZV7QFAPUBTAE.SEARCH&ppt=sp&ppn=sp&ssid=03jb00f8z40000001724934433422&qH=f39f9fa309488ac1">ADD TO CART</a>
+    <a href="https://www.flipkart.com/hitachi-1-5-ton-5-star-split-inverter-ac-white/p/itm55d380871f7c8?pid=ACNGZV7QFAPUBTAE&lid=LSTACNGZV7QFAPUBTAEIIATHU&marketplace=FLIPKART&q=hitachi+1.5+ton+split+ac+&store=j9e%2Fabm%2Fc54&srno=s_1_20&otracker=search&otracker1=search&fm=search-autosuggest&iid=23000b32-db29-4c1d-bb21-bbd483a1dd0a.ACNGZV7QFAPUBTAE.SEARCH&ppt=sp&ppn=sp&ssid=03jb00f8z40000001724934433422&qH=f39f9fa309488ac1" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 4 -->
+<div class="product">
+    <a href="https://www.flipkart.com/voltas-1-5-ton-3-star-window-ac-white/p/itmada7c02df6dcf?pid=ACNGTETKPGUGX4KW&lid=LSTACNGTETKPGUGX4KWQO9DUG&marketplace=FLIPKART&q=Voltas+1.5+Ton+Window+AC&store=j9e%2Fabm%2Fc54&srno=s_1_6&otracker=search&otracker1=search&fm=Search&iid=0362e350-f988-432f-8f5c-1abaff5fdb67.ACNGTETKPGUGX4KW.SEARCH&ppt=sp&ppn=sp&ssid=1qi78n1unk0000001724934657375&qH=94f4c0261c76b1c0">
+        <img src="voltaswindowac.webp" alt="Voltas 1.5 Ton Window AC">
+    </a>
+    <h3>Voltas 1.5 Ton 5 Star Window Inverter AC</h3>
+    <p><span class="bold">Price:</span> ₹24,999</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>1.5 Ton Capacity</li>
+            <li>5 Star Energy Rating</li>
+            <li>High Ambient Cooling</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/voltas-1-5-ton-3-star-window-ac-white/p/itmada7c02df6dcf?pid=ACNGTETKPGUGX4KW&lid=LSTACNGTETKPGUGX4KWQO9DUG&marketplace=FLIPKART&q=Voltas+1.5+Ton+Window+AC&store=j9e%2Fabm%2Fc54&srno=s_1_6&otracker=search&otracker1=search&fm=Search&iid=0362e350-f988-432f-8f5c-1abaff5fdb67.ACNGTETKPGUGX4KW.SEARCH&ppt=sp&ppn=sp&ssid=1qi78n1unk0000001724934657375&qH=94f4c0261c76b1c0" class="btn-blue add-to-cart" data-name="Voltas 1.5 Ton Window AC" data-price="₹24,999" data-specs="1.5 Ton Capacity, 5 Star Energy Rating, High Ambient Cooling" data-image="voltaswindowac.webp" data-url="https://www.flipkart.com/voltas-1-5-ton-3-star-window-ac-white/p/itmada7c02df6dcf?pid=ACNGTETKPGUGX4KW&lid=LSTACNGTETKPGUGX4KWQO9DUG&marketplace=FLIPKART&q=Voltas+1.5+Ton+Window+AC&store=j9e%2Fabm%2Fc54&srno=s_1_6&otracker=search&otracker1=search&fm=Search&iid=0362e350-f988-432f-8f5c-1abaff5fdb67.ACNGTETKPGUGX4KW.SEARCH&ppt=sp&ppn=sp&ssid=1qi78n1unk0000001724934657375&qH=94f4c0261c76b1c0">ADD TO CART</a>
+    <a href="https://www.flipkart.com/voltas-1-5-ton-3-star-window-ac-white/p/itmada7c02df6dcf?pid=ACNGTETKPGUGX4KW&lid=LSTACNGTETKPGUGX4KWQO9DUG&marketplace=FLIPKART&q=Voltas+1.5+Ton+Window+AC&store=j9e%2Fabm%2Fc54&srno=s_1_6&otracker=search&otracker1=search&fm=Search&iid=0362e350-f988-432f-8f5c-1abaff5fdb67.ACNGTETKPGUGX4KW.SEARCH&ppt=sp&ppn=sp&ssid=1qi78n1unk0000001724934657375&qH=94f4c0261c76b1c0" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 5 -->
+<div class="product">
+    <a href="https://www.flipkart.com/blue-star-convertible-4-1-cooling-2023-model-ton-split-inverter-multi-sensors-stabalizer-free-operation-self-diagnosis-dust-filter-ac-white/p/itmf153538e85cff?pid=ACNGHNYZJWCSJZQ8&lid=LSTACNGHNYZJWCSJZQ8S19LQC&marketplace=FLIPKART&q=Blue+Star+1+Ton+Split+AC&store=j9e%2Fabm%2Fc54&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=en_oQrKhXofvohffrA9LHF6oupaSzyjJ6-H8PNkilmct-Sj1sLL8Nf4bQbyWFo5a1-fP-tL0_mP5hOkl0Ijwcv6s_UFjCTyOHoHZs-Z5_PS_w0%3D&ppt=sp&ppn=sp&ssid=o64dn22bc00000001724934815020&qH=812215f56a7a238f">
+        <img src="bluestar1ton.webp" alt="Blue Star 1 Ton Split AC">
+    </a>
+    <h3>Blue Star 1 Ton Split AC</h3>
+    <p><span class="bold">Price:</span> ₹37,490</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>1 Ton Capacity</li>
+            <li>5 Star Energy Rating</li>
+            <li>Inverter Compressor</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/blue-star-convertible-4-1-cooling-2023-model-ton-split-inverter-multi-sensors-stabalizer-free-operation-self-diagnosis-dust-filter-ac-white/p/itmf153538e85cff?pid=ACNGHNYZJWCSJZQ8&lid=LSTACNGHNYZJWCSJZQ8S19LQC&marketplace=FLIPKART&q=Blue+Star+1+Ton+Split+AC&store=j9e%2Fabm%2Fc54&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=en_oQrKhXofvohffrA9LHF6oupaSzyjJ6-H8PNkilmct-Sj1sLL8Nf4bQbyWFo5a1-fP-tL0_mP5hOkl0Ijwcv6s_UFjCTyOHoHZs-Z5_PS_w0%3D&ppt=sp&ppn=sp&ssid=o64dn22bc00000001724934815020&qH=812215f56a7a238f" class="btn-blue add-to-cart" data-name="Blue Star 1 Ton Split AC" data-price="₹37,490" data-specs="1 Ton Capacity, 5 Star Energy Rating, Inverter Compressor" data-image="bluestar1ton.webp" data-url="https://www.flipkart.com/blue-star-convertible-4-1-cooling-2023-model-ton-split-inverter-multi-sensors-stabalizer-free-operation-self-diagnosis-dust-filter-ac-white/p/itmf153538e85cff?pid=ACNGHNYZJWCSJZQ8&lid=LSTACNGHNYZJWCSJZQ8S19LQC&marketplace=FLIPKART&q=Blue+Star+1+Ton+Split+AC&store=j9e%2Fabm%2Fc54&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=en_oQrKhXofvohffrA9LHF6oupaSzyjJ6-H8PNkilmct-Sj1sLL8Nf4bQbyWFo5a1-fP-tL0_mP5hOkl0Ijwcv6s_UFjCTyOHoHZs-Z5_PS_w0%3D&ppt=sp&ppn=sp&ssid=o64dn22bc00000001724934815020&qH=812215f56a7a238f">ADD TO CART</a>
+    <a href="https://www.flipkart.com/blue-star-convertible-4-1-cooling-2023-model-ton-split-inverter-multi-sensors-stabalizer-free-operation-self-diagnosis-dust-filter-ac-white/p/itmf153538e85cff?pid=ACNGHNYZJWCSJZQ8&lid=LSTACNGHNYZJWCSJZQ8S19LQC&marketplace=FLIPKART&q=Blue+Star+1+Ton+Split+AC&store=j9e%2Fabm%2Fc54&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=en_oQrKhXofvohffrA9LHF6oupaSzyjJ6-H8PNkilmct-Sj1sLL8Nf4bQbyWFo5a1-fP-tL0_mP5hOkl0Ijwcv6s_UFjCTyOHoHZs-Z5_PS_w0%3D&ppt=sp&ppn=sp&ssid=o64dn22bc00000001724934815020&qH=812215f56a7a238f" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+    </div>
+</section>
+
+
+
+
+<!-- Computer Accessories Section -->
+<style>
+    .btn-blue, .btn-pink {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px 0;
+        border-radius: 5px;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 16px; /* Ensure consistent font size */
+        line-height: 1.5; /* Consistent line height */
+        transition: background-color 0.3s ease; /* Smooth transition */
+    }
+
+    .btn-blue {
+        background-color: #007bff;
+        color: #fff;
+    }
+    
+    .btn-blue:hover {
+        background-color: #0056b3;
+    }
+    
+    .btn-pink {
+        background-color: #e83e8c;
+        color: #fff;
+    }
+    
+    .btn-pink:hover {
+        background-color: #d63384;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .specifications {
+        position: relative;
+        padding-left: 30px; /* Space for custom bullet */
+    }
+
+    .specifications ul {
+        list-style-type: none; /* Remove default bullets */
+        margin: 0;
+        padding: 0;
+    }
+
+    .specifications li {
+        position: relative;
+        padding-left: 25px; /* Space for custom bullet */
+        margin-bottom: 5px; /* Space between items */
+    }
+
+    .specifications li::before {
+        content: "•"; /* Circle bullet */
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #333; /* Bullet color */
+        font-size: 1.2em; /* Adjust bullet size */
+    }
+
+    .product img {
+        width: 100%; /* Ensure images are responsive */
+        transition: transform 0.3s ease; /* Smooth zoom effect */
+    }
+
+    .product img:hover {
+        transform: scale(1.05); /* Slight zoom effect */
+    }
+
+    @media (max-width: 768px) {
+        .product {
+            margin-bottom: 20px; /* Space between products on smaller screens */
+        }
+    }
+</style>
+
+<style>
+    /* Section Heading */
+    #computer-accessories h2 {
+        font-size: 28px;
+        text-align: center;
+        padding: 15px;
+        color: #0000FF; /* Deep blue color */
+        background: linear-gradient(to right, #ff7e5f, #feb47b);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Yellow underline */
+    #computer-accessories h2::after {
+        content: "";
+        display: block;
+        width: 100px;
+        height: 4px;
+        background-color: #0a0901; /* Yellow color */
+        margin: 10px auto 0; /* Adjust spacing */
+        border-radius: 2px;
+    }
+    
+    /* Real-time effect */
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+        }
+        50% {
+            box-shadow: 0 0 20px rgba(255, 126, 95, 1);
+        }
+        100% {
+            box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+        }
+    }
+    
+    #computer-accessories h2:hover {
+        animation: pulse 1.5s infinite;
+    }
+    </style>
+    
+
+<section id="computer-accessories">
+    <h2>Computer Accessories</h2>
+    <div class="product-section">
+        <!-- Product 1 -->
+<div class="product">
+    <a href="https://www.flipkart.com/logitech-mx-master-3s-wireless-touch-mouse/p/itm271ade01ff274?pid=ACCGFPFCFNG6D5BY&lid=LSTACCGFPFCFNG6D5BYBJQ0YM&marketplace=FLIPKART&q=Logitech+MX+Master+3&store=6bo%2Fai3%2F2ay&srno=s_1_2&otracker=search&otracker1=search&fm=Search&iid=07ee67a7-5f44-409c-9d0b-1726485bcb0c.ACCGFPFCFNG6D5BY.SEARCH&ppt=sp&ppn=sp&ssid=8q563j6r0g0000001724935535138&qH=8450b78c6c284210" target="_blank">
+        <img src="logitechxmaster3.webp" alt="Logitech MX Master 3">
+    </a>
+    <h3>Logitech MX Master 3</h3>
+    <p><span class="bold">Price:</span> ₹8,499</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>Wireless with Bluetooth Connectivity</li>
+            <li>4000 DPI Laser Sensor</li>
+            <li>USB-C Quick Charging</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/logitech-mx-master-3s-wireless-touch-mouse/p/itm271ade01ff274?pid=ACCGFPFCFNG6D5BY&lid=LSTACCGFPFCFNG6D5BYBJQ0YM&marketplace=FLIPKART&q=Logitech+MX+Master+3&store=6bo%2Fai3%2F2ay&srno=s_1_2&otracker=search&otracker1=search&fm=Search&iid=07ee67a7-5f44-409c-9d0b-1726485bcb0c.ACCGFPFCFNG6D5BY.SEARCH&ppt=sp&ppn=sp&ssid=8q563j6r0g0000001724935535138&qH=8450b78c6c284210" class="btn-blue add-to-cart" data-name="Logitech MX Master 3" data-price="₹8,499" data-specs="Wireless with Bluetooth Connectivity, 4000 DPI Laser Sensor, USB-C Quick Charging" data-image="logitechxmaster3.webp" data-url="https://www.flipkart.com/logitech-mx-master-3s-wireless-touch-mouse/p/itm271ade01ff274?pid=ACCGFPFCFNG6D5BY&lid=LSTACCGFPFCFNG6D5BYBJQ0YM&marketplace=FLIPKART&q=Logitech+MX+Master+3&store=6bo%2Fai3%2F2ay&srno=s_1_2&otracker=search&otracker1=search&fm=Search&iid=07ee67a7-5f44-409c-9d0b-1726485bcb0c.ACCGFPFCFNG6D5BY.SEARCH&ppt=sp&ppn=sp&ssid=8q563j6r0g0000001724935535138&qH=8450b78c6c284210">ADD TO CART</a>
+    <a href="https://www.flipkart.com/logitech-mx-master-3s-wireless-touch-mouse/p/itm271ade01ff274?pid=ACCGFPFCFNG6D5BY&lid=LSTACCGFPFCFNG6D5BYBJQ0YM&marketplace=FLIPKART&q=Logitech+MX+Master+3&store=6bo%2Fai3%2F2ay&srno=s_1_2&otracker=search&otracker1=search&fm=Search&iid=07ee67a7-5f44-409c-9d0b-1726485bcb0c.ACCGFPFCFNG6D5BY.SEARCH&ppt=sp&ppn=sp&ssid=8q563j6r0g0000001724935535138&qH=8450b78c6c284210" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 2 -->
+<div class="product">
+    <a href="https://www.flipkart.com/steelseries-red-gear-emera-ele-g11-3200-dpi-usb-gaming-mouse-dark-blue-wireless-optical/p/itm1e92496694f2e?pid=ACCGGKMT9TTQHYH9&lid=LSTACCGGKMT9TTQHYH9KNQ7FH&marketplace=FLIPKART&q=SteelSeries+Arctis+7+mouse&store=6bo%2Fai3%2F2ay&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=755488b8-579f-473b-82be-e8ef3e24fdd8.ACCGGKMT9TTQHYH9.SEARCH&ppt=sp&ppn=sp&ssid=qxce11py7k0000001724935652247&qH=26295f6255e14dde" target="_blank">
+        <img src="steelseriesarctics7.webp" alt="SteelSeries Arctis 7">
+    </a>
+    <h3>Steelseries Red Gear Emera ELE-G11 3200 DPI USB Gaming Mouse</h3>
+    <p><span class="bold">Price:</span> ₹8,574</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>Wireless Mouse</li>
+            <li>For Gaming</li>
+            <li>Interface: USB 2.0</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/steelseries-red-gear-emera-ele-g11-3200-dpi-usb-gaming-mouse-dark-blue-wireless-optical/p/itm1e92496694f2e?pid=ACCGGKMT9TTQHYH9&lid=LSTACCGGKMT9TTQHYH9KNQ7FH&marketplace=FLIPKART&q=SteelSeries+Arctis+7+mouse&store=6bo%2Fai3%2F2ay&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=755488b8-579f-473b-82be-e8ef3e24fdd8.ACCGGKMT9TTQHYH9.SEARCH&ppt=sp&ppn=sp&ssid=qxce11py7k0000001724935652247&qH=26295f6255e14dde" class="btn-blue add-to-cart" data-name="SteelSeries Arctis 7" data-price="₹14,999" data-specs="7.1 Surround Sound, 24-hour Battery Life, Lossless Wireless Audio" data-image="steelseriesarctics7.webp" data-url="https://www.flipkart.com/steelseries-red-gear-emera-ele-g11-3200-dpi-usb-gaming-mouse-dark-blue-wireless-optical/p/itm1e92496694f2e?pid=ACCGGKMT9TTQHYH9&lid=LSTACCGGKMT9TTQHYH9KNQ7FH&marketplace=FLIPKART&q=SteelSeries+Arctis+7+mouse&store=6bo%2Fai3%2F2ay&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=755488b8-579f-473b-82be-e8ef3e24fdd8.ACCGGKMT9TTQHYH9.SEARCH&ppt=sp&ppn=sp&ssid=qxce11py7k0000001724935652247&qH=26295f6255e14dde">ADD TO CART</a>
+    <a href="https://www.flipkart.com/steelseries-red-gear-emera-ele-g11-3200-dpi-usb-gaming-mouse-dark-blue-wireless-optical/p/itm1e92496694f2e?pid=ACCGGKMT9TTQHYH9&lid=LSTACCGGKMT9TTQHYH9KNQ7FH&marketplace=FLIPKART&q=SteelSeries+Arctis+7+mouse&store=6bo%2Fai3%2F2ay&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=755488b8-579f-473b-82be-e8ef3e24fdd8.ACCGGKMT9TTQHYH9.SEARCH&ppt=sp&ppn=sp&ssid=qxce11py7k0000001724935652247&qH=26295f6255e14dde" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 3 -->
+<div class="product">
+    <a href="https://www.flipkart.com/razer-deathadder-v2-x-hyperspeed-dual-mode-work-play-7-program-button-14k-dpi-wireless-optical-gaming-mouse/p/itm0b92ae2da5f86?pid=ACCG99GQZHF4ZJY8&lid=LSTACCG99GQZHF4ZJY8SHL6E5&marketplace=FLIPKART&q=Razer+DeathAdder+V2&store=6bo%2Fai3%2F2ay&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=3cc3594f-bb51-4569-b505-f0c8a70af7b0.ACCG99GQZHF4ZJY8.SEARCH&ppt=sp&ppn=sp&ssid=3mtco1j3ds0000001724935936902&qH=08b5093aa4f22ef1" target="_blank">
+        <img src="zazerdeath.webp" alt="Razer DeathAdder V2">
+    </a>
+    <h3>Razer DeathAdder V2</h3>
+    <p><span class="bold">Price:</span> ₹3,849</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>Interface: 2.4GHz Wireless</li>
+            <li>Razer Optical Mouse Switches</li>
+            <li>Especially For Gaming</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/razer-deathadder-v2-x-hyperspeed-dual-mode-work-play-7-program-button-14k-dpi-wireless-optical-gaming-mouse/p/itm0b92ae2da5f86?pid=ACCG99GQZHF4ZJY8&lid=LSTACCG99GQZHF4ZJY8SHL6E5&marketplace=FLIPKART&q=Razer+DeathAdder+V2&store=6bo%2Fai3%2F2ay&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=3cc3594f-bb51-4569-b505-f0c8a70af7b0.ACCG99GQZHF4ZJY8.SEARCH&ppt=sp&ppn=sp&ssid=3mtco1j3ds0000001724935936902&qH=08b5093aa4f22ef1" class="btn-blue add-to-cart" data-name="Razer DeathAdder V2" data-price="₹6,089" data-specs="20,000 DPI Optical Sensor, Razer Optical Mouse Switches, Speedflex Cable" data-image="zazerdeath.webp" data-url="https://www.flipkart.com/razer-deathadder-v2-x-hyperspeed-dual-mode-work-play-7-program-button-14k-dpi-wireless-optical-gaming-mouse/p/itm0b92ae2da5f86?pid=ACCG99GQZHF4ZJY8&lid=LSTACCG99GQZHF4ZJY8SHL6E5&marketplace=FLIPKART&q=Razer+DeathAdder+V2&store=6bo%2Fai3%2F2ay&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=3cc3594f-bb51-4569-b505-f0c8a70af7b0.ACCG99GQZHF4ZJY8.SEARCH&ppt=sp&ppn=sp&ssid=3mtco1j3ds0000001724935936902&qH=08b5093aa4f22ef1">ADD TO CART</a>
+    <a href="https://www.flipkart.com/razer-deathadder-v2-x-hyperspeed-dual-mode-work-play-7-program-button-14k-dpi-wireless-optical-gaming-mouse/p/itm0b92ae2da5f86?pid=ACCG99GQZHF4ZJY8&lid=LSTACCG99GQZHF4ZJY8SHL6E5&marketplace=FLIPKART&q=Razer+DeathAdder+V2&store=6bo%2Fai3%2F2ay&srno=s_1_1&otracker=search&otracker1=search&fm=Search&iid=3cc3594f-bb51-4569-b505-f0c8a70af7b0.ACCG99GQZHF4ZJY8.SEARCH&ppt=sp&ppn=sp&ssid=3mtco1j3ds0000001724935936902&qH=08b5093aa4f22ef1" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 4 -->
+<div class="product">
+    <a href="https://www.flipkart.com/logitech-g512-carbon-mechanical-rgb-lightsync-backlit-keys-wired-usb-gaming-keyboard/p/itm47c581b40124b?pid=ACCFVD83HTNN3ZBF&lid=LSTACCFVD83HTNN3ZBFYYM5Y4&marketplace=FLIPKART&q=Logitech+G213+Keyboard&store=6bo%2Fai3%2F3oe&srno=s_1_4&otracker=search&otracker1=search&fm=Search&iid=dc7ccda9-5065-48c2-92f3-f2fdb5c1a28e.ACCFVD83HTNN3ZBF.SEARCH&ppt=sp&ppn=sp&ssid=megnsghlq80000001724936108947&qH=d60a2aa9fa960d69" target="_blank">
+        <img src="logitechkeyboard.webp" alt="Logitech G213 Keyboard">
+    </a>
+    <h3>Logitech G512 Keyboard</h3>
+    <p><span class="bold">Price:</span> ₹9,486</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>For Laptops, PCs</li>
+            <li>Interface: Wired USB</li>
+            <li>Dedicated Media Controls</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/logitech-g512-carbon-mechanical-rgb-lightsync-backlit-keys-wired-usb-gaming-keyboard/p/itm47c581b40124b?pid=ACCFVD83HTNN3ZBF&lid=LSTACCFVD83HTNN3ZBFYYM5Y4&marketplace=FLIPKART&q=Logitech+G213+Keyboard&store=6bo%2Fai3%2F3oe&srno=s_1_4&otracker=search&otracker1=search&fm=Search&iid=dc7ccda9-5065-48c2-92f3-f2fdb5c1a28e.ACCFVD83HTNN3ZBF.SEARCH&ppt=sp&ppn=sp&ssid=megnsghlq80000001724936108947&qH=d60a2aa9fa960d69" class="btn-blue add-to-cart" data-name="Logitech G213 Keyboard" data-price="₹3,880" data-specs="RGB Lighting, Spill-resistant Design, Dedicated Media Controls" data-image="logitechkeyboard.webp" data-url="https://www.flipkart.com/logitech-g512-carbon-mechanical-rgb-lightsync-backlit-keys-wired-usb-gaming-keyboard/p/itm47c581b40124b?pid=ACCFVD83HTNN3ZBF&lid=LSTACCFVD83HTNN3ZBFYYM5Y4&marketplace=FLIPKART&q=Logitech+G213+Keyboard&store=6bo%2Fai3%2F3oe&srno=s_1_4&otracker=search&otracker1=search&fm=Search&iid=dc7ccda9-5065-48c2-92f3-f2fdb5c1a28e.ACCFVD83HTNN3ZBF.SEARCH&ppt=sp&ppn=sp&ssid=megnsghlq80000001724936108947&qH=d60a2aa9fa960d69">ADD TO CART</a>
+    <a href="https://www.flipkart.com/logitech-g512-carbon-mechanical-rgb-lightsync-backlit-keys-wired-usb-gaming-keyboard/p/itm47c581b40124b?pid=ACCFVD83HTNN3ZBF&lid=LSTACCFVD83HTNN3ZBFYYM5Y4&marketplace=FLIPKART&q=Logitech+G213+Keyboard&store=6bo%2Fai3%2F3oe&srno=s_1_4&otracker=search&otracker1=search&fm=Search&iid=dc7ccda9-5065-48c2-92f3-f2fdb5c1a28e.ACCFVD83HTNN3ZBF.SEARCH&ppt=sp&ppn=sp&ssid=megnsghlq80000001724936108947&qH=d60a2aa9fa960d69" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+
+<!-- Product 5 -->
+<div class="product">
+    <a href="https://www.flipkart.com/techsio-acer-65w-ac-adapter-19v-3-42a-5-5mm-x-1-7mm-4730z-65-w/p/itmece69e4fd48b2?pid=ACCGNTPUGTJMTJNA&lid=LSTACCGNTPUGTJMTJNAXDNM2K&marketplace=FLIPKART&q=TechSio+Power+Cord+6+A+1+m+Adapter&store=search.flipkart.com&srno=s_1_3&otracker=search&otracker1=search&fm=Search&iid=960056ab-5f2e-42dd-b17f-4ff7416de980.ACCGNTPUGTJMTJNA.SEARCH&ppt=sp&ppn=sp&ssid=3fadtyvidc0000001724936409435&qH=d77a1174b7a89149" target="_blank">
+        <img src="techsiopowercord.webp" alt="TechSio Power Cord 6 A 1 m Adapter">
+    </a>
+    <h3>TechSio Acer 65W Ac Adapter</h3>
+    <p><span class="bold">Price:</span> ₹947</p>
+    <p><span class="bold">Specifications:</span></p>
+    <div class="specifications">
+        <ul>
+            <li>Consumption : 65 W Power</li>
+            <li>Power Cord Included</li>
+            <li>Universal</li>
+        </ul>
+    </div>
+    <a href="https://www.flipkart.com/techsio-acer-65w-ac-adapter-19v-3-42a-5-5mm-x-1-7mm-4730z-65-w/p/itmece69e4fd48b2?pid=ACCGNTPUGTJMTJNA&lid=LSTACCGNTPUGTJMTJNAXDNM2K&marketplace=FLIPKART&q=TechSio+Power+Cord+6+A+1+m+Adapter&store=search.flipkart.com&srno=s_1_3&otracker=search&otracker1=search&fm=Search&iid=960056ab-5f2e-42dd-b17f-4ff7416de980.ACCGNTPUGTJMTJNA.SEARCH&ppt=sp&ppn=sp&ssid=3fadtyvidc0000001724936409435&qH=d77a1174b7a89149" class="btn-blue add-to-cart" data-name="TechSio Power Cord 6 A 1 m Adapter" data-price="₹219" data-specs="6 A Current Rating, 1 Meter Length, 3-pin Plug Design" data-image="techsiopowercord.webp" data-url="https://www.flipkart.com/techsio-acer-65w-ac-adapter-19v-3-42a-5-5mm-x-1-7mm-4730z-65-w/p/itmece69e4fd48b2?pid=ACCGNTPUGTJMTJNA&lid=LSTACCGNTPUGTJMTJNAXDNM2K&marketplace=FLIPKART&q=TechSio+Power+Cord+6+A+1+m+Adapter&store=search.flipkart.com&srno=s_1_3&otracker=search&otracker1=search&fm=Search&iid=960056ab-5f2e-42dd-b17f-4ff7416de980.ACCGNTPUGTJMTJNA.SEARCH&ppt=sp&ppn=sp&ssid=3fadtyvidc0000001724936409435&qH=d77a1174b7a89149">ADD TO CART</a>
+    <a href="https://www.flipkart.com/techsio-acer-65w-ac-adapter-19v-3-42a-5-5mm-x-1-7mm-4730z-65-w/p/itmece69e4fd48b2?pid=ACCGNTPUGTJMTJNA&lid=LSTACCGNTPUGTJMTJNAXDNM2K&marketplace=FLIPKART&q=TechSio+Power+Cord+6+A+1+m+Adapter&store=search.flipkart.com&srno=s_1_3&otracker=search&otracker1=search&fm=Search&iid=960056ab-5f2e-42dd-b17f-4ff7416de980.ACCGNTPUGTJMTJNA.SEARCH&ppt=sp&ppn=sp&ssid=3fadtyvidc0000001724936409435&qH=d77a1174b7a89149" class="btn-pink" target="_blank">BUY NOW</a>
+</div>
+    </div>
+</section>
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Handle Add to Cart button clicks
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+    
+                // Gather product details
+                const product = {
+                    name: this.getAttribute('data-name'),
+                    price: this.getAttribute('data-price'),
+                    specs: this.getAttribute('data-specs'),
+                    image: this.getAttribute('data-image'),
+                    url: this.getAttribute('data-url')
+                };
+    
+                // Save product to localStorage
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                cart.push(product);
+                localStorage.setItem('cart', JSON.stringify(cart));
+    
+                // Redirect to cart.html
+                setTimeout(() => {
+                    window.location.href = 'cart.html';
+                }, 500);
+            });
+        });
+    
+        // Cart button redirect logic
+        document.getElementById('cart-button').addEventListener('click', function() {
+            // Redirect to the cart page
+            window.location.href = 'cart.html';
+        });
+    });
+</script>
+
+
+
+
+
+
+<!-- FOOTER Section -->
+<body>
+    <style>
+        #footer-author {
+            background-color: #FFFF00; /* Yellow color */
+            padding: 2px 5px; /* Optional: adds some padding around the text */
+            border-radius: 3px; /* Optional: adds rounded corners to the background */
+        }
+    
+        #company-name {
+            background-color: #f0022a;
+            color: white; /* Text color to ensure readability */
+            padding: 2px 5px; /* Optional: adds some padding around the text */
+            border-radius: 3px; /* Optional: adds rounded corners to the background */
+        }
+    </style>
+    
+
+    <body>
+        <footer>
+            <p>&copy; 2024 - Present. <strong id="company-name">DIPTRONIC Limited.</strong> All Rights Reserved.</p>
+            <p>Made by - <strong id="footer-author">Shubhadip Sutradhar</strong></p>
+            <p>
+                <a href="#" id="privacy-policy-link">Privacy Policy</a> | 
+                <a href="#" id="terms-of-service-link">Terms of Service</a> | 
+                <a href="#" id="contact-us-link">Contact Us</a>
+            </p>
+        </footer>
+    </body>
+    
+</body>
+
+
+
+
+<!-- Privacy Policy -->
+        <style>
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+    
+            .modal-content {
+                position: relative;
+                background-color: #fff;
+                margin: 15% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%;
+                max-width: 600px;
+                border-radius: 8px;
+                z-index: 1010;
+            }
+    
+            .close {
+                position: absolute;
+                top: 10px;
+                right: 20px;
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+            }
+    
+            .modal-content h2 {
+                background-color: #d1ed33; /* Light yellow */
+                display: inline-block;
+                padding: 5px 10px;
+                border-radius: 4px;
+                text-align: center;
+                margin: 0 auto; /* Centering the element */
+            }
+    
+            /* Center the h2 within its parent */
+            .modal-content h2 {
+                display: block;
+                width: fit-content;
+                margin: 0 auto;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+    
+    <!-- Privacy Policy Modal -->
+    <div id="privacy-policy-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>DIPTRONIC's Privacy Policy</h2>
+            <p>At DIPTRONIC, we value your privacy and are committed to protecting your personal information. This privacy policy explains how we collect and also protect your data.</p>
+            <h3>Information We Collect</h3>
+            <ul>
+                <li>Contact information (name, email)</li>
+                <li>Login credentials (username, password)</li>
+            </ul>
+            <h3>How We Protect Your Information</h3>
+            <ul>
+                <li>Secure servers and databases</li>
+                <li>Encryption for sensitive data</li>
+                <li>Access controls and authentication measures</li>
+                <li>Regular security updates and monitoring</li>
+            </ul>
+            <h3>Sharing Your Information</h3>
+            <p>We do not share your information with third parties, except:</p>
+            <ul>
+                <li>Payment processors (for order processing)</li>
+                <li>Shipping providers (for order delivery)</li>
+                <li>Law enforcement (if required by law)</li>
+            </ul>
+            <h3>Your Rights</h3>
+            <ul>
+                <li>Access and correct your personal information</li>
+                <li>Request data deletion (subject to legal requirements)</li>
+            </ul>
+            <h3>Changes to This Policy</h3>
+            <p>We reserve the right to update this policy at any time.</p>
+    
+            <p>By using DIPTRONIC, you agree to this privacy policy. If you have questions or concerns, please contact us at <a href="mailto:diptronic@gmail.com">diptronic@gmail.com</a></p>
+        </div>
+    </div>
+    
+    <script>
+        // Show the modal
+        document.getElementById('privacy-policy-link').onclick = function(event) {
+            event.preventDefault();
+            document.getElementById('privacy-policy-modal').style.display = 'block';
+        }
+    
+        // Close the modal when the user clicks on the <span> (x)
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('privacy-policy-modal').style.display = 'none';
+        }
+    
+        // Close the modal when the user clicks anywhere outside of the modal
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('privacy-policy-modal')) {
+                document.getElementById('privacy-policy-modal').style.display = 'none';
+            }
+        }
+    </script>
+    
+    </body>
+    </html>
+    
+
+
+
+
+<!-- Terms of Service -->
+    <style>
+        .popup {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .popup-content {
+            position: relative;
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+            z-index: 1010;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .popup-content h2 {
+            background-color: #d1ed33; /* Light yellow */
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            text-align: center;
+            margin: 0 auto; /* Centering the element */
+        }
+
+        /* Center the h2 within its parent */
+        .popup-content h2 {
+            display: block;
+            width: fit-content;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* Prevent background scrolling */
+        body.modal-open {
+            overflow: hidden;
+            height: 100vh; /* Ensure full viewport height is covered */
+        }
+    </style>
+</head>
+<body>
+
+
+
+<!-- Terms of Service Pop-up -->
+<div id="terms-of-service-popup" class="popup">
+    <div class="popup-content">
+        <span class="close-btn" id="close-popup">&times;</span>
+        <h2>DIPTRONIC's Terms of Service</h2>
+        <p>Welcome to DIPTRONIC! By using our website, you agree to these Terms of Service.</p>
+        <h3>1. Eligibility</h3>
+        <ul>
+            <li>You must be at least 10 years old to use DIPTRONIC.</li>
+            <li>You must provide accurate and complete registration information.</li>
+        </ul>
+        <h3>2. Account Security</h3>
+        <ul>
+            <li>You are responsible for maintaining the confidentiality of your account login credentials.</li>
+            <li>You must notify us immediately of any unauthorized use of your account.</li>
+        </ul>
+        <h3>3. Orders and Payments</h3>
+        <ul>
+            <li>All orders are subject to availability and acceptance.</li>
+        </ul>
+        <h3>4. Returns and Refunds</h3>
+        <ul>
+            <li>Returns and Refunds are accepted as per company policy.</li>
+        </ul>
+        <h3>5. Intellectual Property</h3>
+        <ul>
+            <li>All content on DIPTRONIC is not our property or licensed to us.</li>
+            <li>You may not copy, reproduce, or modify any content without our permission.</li>
+        </ul>
+        <h3>6. User Conduct</h3>
+        <ul>
+            <li>You must use DIPTRONIC for lawful purposes only.</li>
+            <li>You must not submit false or misleading information.</li>
+        </ul>
+        <h3>7. Changes to Terms</h3>
+        <ul>
+            <li>We reserve the right to update these Terms at any time.</li>
+        </ul>
+        <p>By using DIPTRONIC, you agree to our Terms of Service. If you have questions or concerns, please contact us at <a href="mailto:diptronic@gmail.com">diptronic@gmail.com</a>.</p>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var modal = document.getElementById("terms-of-service-popup");
+    var btn = document.getElementById("terms-of-service-link");
+    var closeBtn = document.getElementById("close-popup");
+
+    // Open the modal when the user clicks the "Terms of Service" link
+    btn.onclick = function() {
+        modal.style.display = "block";
+        document.body.classList.add('modal-open');
+    }
+
+    // Close the modal when the user clicks on the close button (×)
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+        document.body.classList.remove('modal-open');
+    }
+
+    // Close the modal when the user clicks anywhere outside of the modal content
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+            document.body.classList.remove('modal-open');
+        }
+    }
+});
+</script>
+</body>
+</html>
+
+
+
+
+
+<!-- Contact Form -->
+<style>
+    .overlay {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .contact-form {
+        display: none;
+        position: relative;
+        background-color: #fff;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #ece2e2;
+        width: 90%;
+        max-width: 400px; /* Standard width */
+        border-radius: 8px;
+        z-index: 1001;
+        overflow-y: auto; /* Ensure the form is scrollable if content overflows */
+    }
+
+    .contact-form h2 {
+        background-color: #d1ed33; /* Light yellow */
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 4px;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .contact-form h2 {
+        display: block;
+        width: fit-content;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .contact-form form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+
+    .contact-form button {
+        padding: 10px;
+        border-radius: 4px;
+        border: none;
+        background-color: #28a745;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .contact-info {
+        margin-top: 20px;
+    }
+
+    .contact-info p {
+        margin: 5px 0;
+    }
+
+    .contact-info .label {
+        font-weight: bold;
+    }
+
+    .contact-info .info {
+        margin-left: 10px;
+        font-family: 'Abadi', sans-serif;
+    }
+
+    .contact-info i {
+        margin-right: 5px;
+    }
+
+    #form-message {
+        margin-top: 10px;
+        color: #28a745;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="overlay" id="overlay"></div>
+<div class="contact-form" id="contact-form">
+    <button class="close-btn" id="close-form">&times;</button> <!-- Close button -->
+    <h2>Contact Us</h2>
+    <form id="form">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <textarea name="message" placeholder="Your Message/Query" required></textarea>
+        <button type="submit">Submit</button>
+    </form>
+    <p id="form-message" style="display: none;">Message Sent Successfully</p>
+    <div class="contact-info">
+        <p><span class="label">Phone</span><i>&#9742;</i><span class="info">1234567890</span></p>
+        <p><span class="label">Email</span><i>&#9993;</i><span class="info">diptronic@gmail.com</span></p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('contact-us-link').addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('contact-form').style.display = 'block';
+    });
+
+    document.getElementById('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        // Simulate form submission
+        document.getElementById('form').reset();
+        document.getElementById('form-message').style.display = 'block';
+        setTimeout(function() {
+            document.getElementById('form-message').style.display = 'none';
+            document.getElementById('contact-form').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }, 2000); // Hide the message and form after 2 seconds
+    });
+
+    document.getElementById('overlay').addEventListener('click', function(event) {
+        if (event.target === this) {
+            document.getElementById('contact-form').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+    });
+
+    document.getElementById('close-form').addEventListener('click', function() {
+        document.getElementById('contact-form').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    });
+</script>
+</body>
+</html>

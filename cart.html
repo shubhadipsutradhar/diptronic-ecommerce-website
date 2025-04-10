@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .cart-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        .cart-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+        .cart-item img {
+            max-width: 100px;
+            height: auto;
+            border-radius: 5px;
+        }
+        .cart-item-details {
+            flex: 1;
+        }
+        .remove-item {
+            background: url('https://img.icons8.com/material-outlined/24/000000/filled-trash.png') no-repeat center;
+            background-size: contain;
+            width: 24px;
+            height: 24px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+        .add-item {
+            background: url('https://img.icons8.com/material-outlined/24/000000/add.png') no-repeat center;
+            background-size: contain;
+            width: 24px;
+            height: 24px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            position: absolute;
+            right: 40px;
+            top: 10px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #f0022a;
+            color: white; /* White text color */
+            padding: 10px 20px; /* Padding to make it look like a button */
+            text-decoration: none; /* Remove underline */
+            font-size: 16px; /* Font size */
+            border-radius: 5px; /* Rounded corners */
+            font-weight: bold; /* Bold text */
+            transition: background-color 0.3s; /* Smooth background color transition on hover */
+        }
+        .button:hover {
+            background-color: #002080; /* Slightly darker blue for hover effect */
+        }
+    </style>
+</head>
+<body>
+
+<div class="cart-container">
+    <h1>Your Cart</h1>
+    <div id="cart-items"></div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Load cart items from localStorage
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartContainer = document.getElementById('cart-items');
+
+    if (cartItems.length === 0) {
+        cartContainer.innerHTML = '<p>Your cart is empty. Go back to <a href="index.html" class="button">DIPTRONIC</a> and add items to your cart.</p>';
+    } else {
+        cartItems.forEach(item => {
+            const cartItemDiv = document.createElement('div');
+            cartItemDiv.className = 'cart-item';
+            cartItemDiv.innerHTML = 
+                `<img src="${item.image}" alt="${item.name}">
+                <div class="cart-item-details">
+                    <h2>${item.name}</h2>
+                    <p><strong>Price:</strong> ${item.price}</p>
+                    <p><strong>Specifications:</strong> ${item.specs}</p>
+                </div>
+                <button class="remove-item" data-name="${item.name}"></button>
+                <button class="add-item"></button>`;
+            cartContainer.appendChild(cartItemDiv);
+        });
+    }
+
+    // Handle item removal
+    document.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', function() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = cart.filter(item => item.name !== this.getAttribute('data-name'));
+            localStorage.setItem('cart', JSON.stringify(cart));
+            window.location.reload(); // Refresh the page to update cart items
+        });
+    });
+
+    // Automatically redirect to Flipkart after a delay
+    setTimeout(() => {
+        window.location.href = 'https://www.flipkart.com/';
+    }, 2100); // Adjust the time delay as needed for redirecting to Filpkart 
+});
+</script>
+
+</body>
+</html>
