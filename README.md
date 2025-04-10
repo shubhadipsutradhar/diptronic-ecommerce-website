@@ -9,10 +9,10 @@
 
 🔗 Visit now live at https://diptronic.netlify.app and discover the ultimate shopping experience for all your electrical & technical needs!
 
-![image alt]()
-![image alt]()
-![image alt]()
-![image alt]()
-![image alt]()
-![image alt]()
-![image alt]()
+![image alt](https://github.com/shubhadipsutradhar/diptronic-ecommerce-website/blob/114136c394d784a72fea9b812620c05f2532000b/DIPTRONIC%201.png)
+![image alt](https://github.com/shubhadipsutradhar/diptronic-ecommerce-website/blob/114136c394d784a72fea9b812620c05f2532000b/DIPTRONIC%202.png)
+![image alt](https://github.com/shubhadipsutradhar/diptronic-ecommerce-website/blob/114136c394d784a72fea9b812620c05f2532000b/DIPTRONIC%203.png)
+![image alt](https://github.com/shubhadipsutradhar/diptronic-ecommerce-website/blob/114136c394d784a72fea9b812620c05f2532000b/DIPTRONIC%204.png)
+![image alt](https://github.com/shubhadipsutradhar/diptronic-ecommerce-website/blob/114136c394d784a72fea9b812620c05f2532000b/DIPTRONIC%205.png)
+![image alt](https://github.com/shubhadipsutradhar/diptronic-ecommerce-website/blob/114136c394d784a72fea9b812620c05f2532000b/DIPTRONIC%206.png)
+![image alt](https://github.com/shubhadipsutradhar/diptronic-ecommerce-website/blob/114136c394d784a72fea9b812620c05f2532000b/DIPTRONIC%207.png)
