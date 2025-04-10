@@ -7,7 +7,7 @@
 📱 Seamless User Experience – Intuitive navigation, fast-loading product pages, and a responsive layout optimized for all devices.
 🔒 Secure & Scalable Architecture – Built with clean, maintainable code to ensure smooth performance and future enhancements.
 
-🔗 Visit now live at https://diptronic.netlify.app and discover the ultimate shopping experience for all your electrical & technical needs!
+🔗 Visit now live at ➡ https://diptronic.netlify.app and discover the ultimate shopping experience for all your electrical & technical needs!
 
 ![image alt](https://github.com/shubhadipsutradhar/diptronic-ecommerce-website/blob/114136c394d784a72fea9b812620c05f2532000b/DIPTRONIC%201.png)
 ![image alt](https://github.com/shubhadipsutradhar/diptronic-ecommerce-website/blob/114136c394d784a72fea9b812620c05f2532000b/DIPTRONIC%202.png)
