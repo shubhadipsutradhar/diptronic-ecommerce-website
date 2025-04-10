@@ -9,4 +9,10 @@
 
 🔗 Visit now live at https://diptronic.netlify.app and discover the ultimate shopping experience for all your electrical & technical needs!
 
-![image alt](https://github.com/shubhadipsutradhar/diptronic-ecommerce-website/blob/0aa1e4213148a3f2219c71c11da09f22ceba2d20/xiaomimi11.webp)
+![image alt]()
+![image alt]()
+![image alt]()
+![image alt]()
+![image alt]()
+![image alt]()
+![image alt]()
